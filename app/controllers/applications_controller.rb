@@ -17,6 +17,6 @@ class ApplicationsController < ApplicationController
   private
 
   def application_params
-    params.require(:application).permit(:"job_d")
+    params.require(:application).permit(:job_d, :cv)
   end
 end

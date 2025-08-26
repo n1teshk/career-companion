@@ -1,9 +1,12 @@
 <h1>New Application</h1>
 
-<%= form_with model: @application, local: true do |f| %>
+<%= simple_form_for @application do |f| %>
   <div>
-    <%= f.label :job_d, "Job Description" %><br>
-    <%= f.text_area :job_d %>
+    <%= f.input :job_d %>
+  </div>
+
+  <div>
+    <%= f.input :cv, accept: 'application/pdf' %>
   </div>
 
   <div>
