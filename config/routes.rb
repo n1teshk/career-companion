@@ -12,8 +12,10 @@ Rails.application.routes.draw do
   get  "/dashboard", to:"dashboards#all"
 
 
+
   resources :applications do
-    resources :pitchs
+    get  "/overview", to:"overviews#all"
+    resources :pitches
     resources :cls
   end
 

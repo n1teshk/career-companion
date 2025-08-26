@@ -1,0 +1,12 @@
+<h1>New Application</h1>
+
+<%= form_with model: @application, local: true do |f| %>
+  <div>
+    <%= f.label :job_d, "Job Description" %><br>
+    <%= f.text_area :job_d %>
+  </div>
+
+  <div>
+    <%= f.submit "Create Application" %>
+  </div>
+<% end %>
