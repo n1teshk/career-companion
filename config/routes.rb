@@ -14,11 +14,16 @@ Rails.application.routes.draw do
 
 
   resources :applications do
-    get  "/overview", to:"overviews#all"
+
+  member do
+    get  :trait
+    patch :trait
+    get  :overview
+  end
+
+
     resources :pitches
     resources :cls
   end
 
-  # Defines the root path route ("/")
-  # root "posts#index"
 end
