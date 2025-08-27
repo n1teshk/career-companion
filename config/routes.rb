@@ -9,7 +9,7 @@ Rails.application.routes.draw do
 
   get  "/suggestion", to:"suggestion#new"
   post  "/suggestion", to:"suggestion#create"
-  get  "/dashboard", to:"dashboards#all"
+  get  "/dashboard", to:"dashboards#index"
 
 
 
