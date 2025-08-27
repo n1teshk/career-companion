@@ -1,0 +1,60 @@
+<footer class="bg-white border-t border-gray-200">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="space-y-4" data-id="footer-brand">
+        <%= link_to root_path, class: "flex items-center space-x-3", data: { id: "footer-logo" } do %>
+          <div class="h-10 w-10 rounded-lg flex items-center justify-center text-white font-bold" style="background: #4f46e5;">
+            PU
+          </div>
+          <div>
+            <div class="text-lg font-semibold leading-tight">PitchUpYourLife</div>
+            <div class="text-sm text-gray-500">AI-assisted career helper</div>
+          </div>
+        <% end %>
+
+        <p class="text-sm text-gray-600 max-w-sm" data-id="footer-tagline">
+          Create tailored cover letters, pitch scripts and company insights — faster and with confidence.
+        </p>
+
+        <div class="flex items-center space-x-3" aria-hidden="true" data-id="footer-social">
+          <a href="#" class="p-2 rounded-md hover:bg-gray-100" data-id="footer-social-twitter" aria-label="Twitter">
+            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M23 3a10.9 10.9 0 01-3.14 1.53A4.48 4.48 0 0012 7.5v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/></svg>
+          </a>
+          <a href="#" class="p-2 rounded-md hover:bg-gray-100" data-id="footer-social-linkedin" aria-label="LinkedIn">
+            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.98 3.5C4.98 4.88 3.86 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1 4.98 2.12 4.98 3.5zM.2 8h4.6V24H.2zM8.98 8h4.4v2.16h.06c.61-1.16 2.1-2.16 4.32-2.16 4.62 0 5.48 3.04 5.48 6.99V24h-4.6v-7.54c0-1.8-.03-4.12-2.51-4.12-2.51 0-2.89 1.96-2.89 3.99V24h-4.6z"/></svg>
+          </a>
+          <a href="#" class="p-2 rounded-md hover:bg-gray-100" data-id="footer-social-github" aria-label="GitHub">
+            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5A12 12 0 00.5 12.6c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.2.8-.6v-2.1c-3.2.7-3.9-1.4-3.9-1.4-.6-1.5-1.5-1.9-1.5-1.9-1.2-.8.1-.8.1-.8 1.4.1 2.2 1.5 2.2 1.5 1.1 1.9 2.9 1.4 3.6 1.1.1-.8.4-1.4.7-1.8-2.6-.3-5.4-1.3-5.4-5.8 0-1.3.5-2.4 1.3-3.3-.1-.3-.6-1.6.1-3.3 0 0 1.1-.4 3.6 1.3a12.3 12.3 0 016.6 0c2.5-1.7 3.6-1.3 3.6-1.3.7 1.7.2 3 .1 3.3.8.9 1.3 2 1.3 3.3 0 4.5-2.8 5.5-5.4 5.8.4.4.8 1.1.8 2.2v3.2c0 .4.2.7.8.6A12 12 0 0012 .5z"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-6 md:col-span-2" data-id="footer-links">
+        <div>
+          <h4 class="text-sm font-medium text-gray-900 mb-3" data-id="footer-links-products-title">Product</h4>
+          <ul class="space-y-2 text-sm text-gray-600">
+            <li data-id="footer-link-features"><%= link_to "Features", "#features", class: "hover:underline" %></li>
+            <li data-id="footer-link-templates"><%= link_to "Templates", "/templates", class: "hover:underline" %></li>
+            <li data-id="footer-link-docs"><%= link_to "Docs", "#docs", class: "hover:underline" %></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="text-sm font-medium text-gray-900 mb-3" data-id="footer-links-company-title">Company</h4>
+          <ul class="space-y-2 text-sm text-gray-600">
+            <li data-id="footer-link-about"><%= link_to "About", "/about", class: "hover:underline" %></li>
+            <li data-id="footer-link-careers"><%= link_to "Careers", "/careers", class: "hover:underline" %></li>
+            <li data-id="footer-link-contact"><%= link_to "Contact", "/contact", class: "hover:underline" %></li>
+            <li data-id="footer-link-legal"><%= link_to "Privacy & Terms", "/privacy", class: "hover:underline" %></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-10 border-t border-gray-100 pt-6 flex flex-col md:flex-row items-center justify-between" data-id="footer-legal">
+      <div class="text-sm text-gray-500 mb-4 md:mb-0" data-id="footer-copyright">
+        &copy; <%= Time.current.year %> PitchUpYourLife — All rights reserved.
+      </div>
+    </div>
+  </div>
+</footer>

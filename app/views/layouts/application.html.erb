@@ -5,16 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-
-
+    <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbo-track': 'reload' %>
+    <%= stylesheet_link_tag 'custom_overrides', media: 'all', 'data-turbo-track': 'reload' %>
 
     <%= javascript_importmap_tags %>
   </head>
 
-  <body><%= render "shared/navbar" %>
-<%= render "shared/flashes" %>
-
-    <%= yield %>
+  <body class="flex flex-col min-h-screen">
+    <%= render "shared/navbar" %>
+    <%= render "shared/flashes" %>
+    
+    <div class="flex-grow">
+      <%= yield %>
+    </div>
+    
+    <%= render "shared/footer" %>
   </body>
 </html>

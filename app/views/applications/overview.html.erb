@@ -1,21 +1,21 @@
 
 
-<%= button_to "Generate CL", generate_cl_application_path(@application, prompt_cl: @llm_prompt_cl),
+<%= button_to "Re-Generate CL", generate_cl_application_path(@application, prompt_cl: @llm_prompt_cl),
               method: :post,
               class: "btn btn-primary" %>
 
 
 <div id="cl_output">
-
+<%= simple_format(@cl_message) %>
 </div>
 
 
-<%= button_to "Generate Video", generate_video_application_path(@application, prompt_video: @llm_prompt_video),
+<%= button_to "Re-Generate Video", generate_video_application_path(@application, prompt_video: @llm_prompt_video),
               method: :post,
               class: "btn btn-primary" %>
 
 
 
 <div id="video_output">
-
+<%= simple_format(@video_message) %>
 </div>
