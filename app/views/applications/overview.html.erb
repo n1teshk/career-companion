@@ -1,5 +1,21 @@
-<% @traits.each do |trait| %>
-<%= trait %>
-<% end %>
 
-<%= @llm_prompt %>
+
+<%= button_to "Generate CL", generate_cl_application_path(@application, prompt_cl: @llm_prompt_cl),
+              method: :post,
+              class: "btn btn-primary" %>
+
+
+<div id="cl_output">
+
+</div>
+
+
+<%= button_to "Generate Video", generate_video_application_path(@application, prompt_video: @llm_prompt_video),
+              method: :post,
+              class: "btn btn-primary" %>
+
+
+
+<div id="video_output">
+
+</div>
