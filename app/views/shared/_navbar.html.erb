@@ -1,38 +1,70 @@
-<div class="navbar navbar-expand-sm navbar-light navbar-lewagon">
-  <div class="container-fluid">
-    <%= link_to "#", class: "navbar-brand" do %>
-      <%= image_tag "https://raw.githubusercontent.com/lewagon/fullstack-images/master/uikit/logo.png" %>
-    <% end %>
-
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto">
-        <% if user_signed_in? %>
-          <li class="nav-item active">
-            <%= link_to "Home", "#", class: "nav-link" %>
-          </li>
-          <li class="nav-item">
-            <%= link_to "Messages", "#", class: "nav-link" %>
-          </li>
-          <li class="nav-item dropdown">
-          <a href="#" class="avatar" id="navbarDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <%= image_tag "https://kitt.lewagon.com/placeholder/users/ssaunier", class: "avatar", alt: "dropdown menu" %>
-          </a>
-            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-              <%= link_to "Action", "#", class: "dropdown-item" %>
-              <%= link_to "Another action", "#", class: "dropdown-item" %>
-              <%= link_to "Log out", destroy_user_session_path, data: {turbo_method: :delete}, class: "dropdown-item" %>
-            </div>
-          </li>
-        <% else %>
-          <li class="nav-item">
-            <%= link_to "Login", new_user_session_path, class: "nav-link" %>
-          </li>
+<nav class="sticky top-0 z-50 bg-white shadow-sm border-b border-gray-200">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-16">
+      <!-- Logo / Brand -->
+      <div class="flex items-center">
+        <%= link_to root_path, class: "flex items-center space-x-3", data: { id: "nav-logo" } do %>
+          <div class="h-9 w-9 rounded-lg flex items-center justify-center text-white font-bold" style="background: #4f46e5;">
+            PU
+          </div>
+          <div>
+            <div class="text-lg font-semibold leading-tight">PitchUpYourLife</div>
+            <div class="text-xs text-gray-500 -mt-1">AI-powered career helper</div>
+          </div>
         <% end %>
-      </ul>
+      </div>
+
+      <!-- Desktop links -->
+      <div class="hidden md:flex md:items-center md:space-x-8">
+        <%= link_to "#features", class: "text-sm text-gray-700 hover:text-gray-900 no-underline", data: { id: "nav-features" } do %>
+          Features
+        <% end %>
+
+        <%= link_to "#how-it-works", class: "text-sm text-gray-700 hover:text-gray-900 no-underline", data: { id: "nav-how-it-works" } do %>
+          How it works
+        <% end %>
+      </div>
+
+      <!-- Auth actions -->
+      <div class="flex items-center space-x-3">
+        <% if user_signed_in? %>
+          <%= link_to "/dashboard", class: "inline-flex items-center px-4 py-2 rounded-md text-sm font-medium bg-indigo-600 text-white hover:bg-indigo-700 no-underline", data: { id: "nav-dashboard" } do %>
+            Dashboard
+          <% end %>
+
+          <%= link_to destroy_user_session_path, method: :delete, data: { confirm: "Are you sure you want to log out?", id: "nav-logout" }, class: "hidden sm:inline-flex items-center px-3 py-2 border border-gray-200 rounded-md text-sm text-gray-700 hover:bg-gray-50 no-underline" do %>
+            Log out
+          <% end %>
+
+          <!-- Visible on small screens: logout -->
+          <%= link_to destroy_user_session_path, method: :delete, data: { confirm: "Are you sure you want to log out?", id: "nav-logout-sm" }, class: "sm:hidden inline-flex items-center px-3 py-2 border border-gray-200 rounded-md text-sm text-gray-700 hover:bg-gray-50 no-underline" do %>
+            Log out
+          <% end %>
+        <% else %>
+          <%= link_to new_user_registration_path, class: "hidden sm:inline-flex items-center px-4 py-2 border border-gray-300 rounded-md text-sm text-gray-700 hover:bg-gray-50 no-underline", data: { id: "nav-signup" } do %>
+            Sign up
+          <% end %>
+
+          <%= link_to new_user_session_path, class: "inline-flex items-center px-4 py-2 rounded-md text-sm font-medium bg-indigo-600 text-white hover:bg-indigo-700 no-underline", data: { id: "nav-login" } do %>
+            Log in
+          <% end %>
+
+          <!-- Small-screen sign up -->
+          <%= link_to new_user_registration_path, class: "sm:hidden inline-flex items-center px-3 py-2 border border-gray-300 rounded-md text-sm text-gray-700 hover:bg-gray-50 no-underline", data: { id: "nav-signup-sm" } do %>
+            Sign up
+          <% end %>
+        <% end %>
+      </div>
+
+      <!-- Mobile menu button (non-JS fallback visual) -->
+      <div class="md:hidden ml-3">
+        <button type="button" aria-label="Open main menu" data-id="nav-mobile-toggle" class="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:bg-gray-100">
+          <!-- Hamburger icon -->
+          <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+      </div>
     </div>
   </div>
-</div>
+</nav>
