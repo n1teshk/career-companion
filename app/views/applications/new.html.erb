@@ -1,15 +1,50 @@
-<h1>New Application</h1>
+<h1 class="page-title">Create New Application</h1>
+<h2 class="page-subtitle">
+  Upload your CV and the job description to get started with AI-powered application assistance
+</h2>
 
-<%= simple_form_for @application do |f| %>
-  <div>
-    <%= f.input :job_d %>
-  </div>
+<%= simple_form_for @application, html: { class: 'application-form', multipart: true } do |f| %>
+  <div class="application-main-container">
+    <div class="input-pair-container">
+      <!-- CV Upload -->
+      <div class="file-upload-container">
+        <label class="block-label">Your CV</label>
+        <label class="file-upload">
+          <%= f.file_field :cv, accept: 'application/pdf', class: 'hidden-file-input' %>
+          <div class="upload-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1M12 12V4m0 0L8 8m4-4l4 4" />
+            </svg>
+          </div>
+          <p class="upload-text-main">Drag and drop your CV here or click to browse</p>
+          <p class="upload-text-sub">Supports .pdf, .docx, .doc files up to 10MB</p>
+        </label>
+        <% if @application.errors[:cv].any? %>
+          <div class="field-error"><%= @application.errors[:cv].first %></div>
+        <% end %>
+      </div>
 
-  <div>
-    <%= f.input :cv, accept: 'application/pdf' %>
-  </div>
+      <!-- Job Description -->
+      <div class="text-input-container">
+        <label class="block-label">Job Description</label>
+        <%= f.text_area :job_d, placeholder: "Paste the job description here as plain text...", rows: 12, class: 'job-description-textarea' %>
+        <% if @application.errors[:job_d].any? %>
+          <div class="field-error"><%= @application.errors[:job_d].first %></div>
+        <% end %>
+      </div>
+    </div>
 
-  <div>
-    <%= f.submit "Create Application" %>
+    <div class="submit-btn-wrapper">
+      <%= f.submit "Next →", class: "next-button" %>
+    </div>
+
+    <div class="tips-box">
+      <h3>Tips for best results:</h3>
+      <ul>
+        <li><span class="dot"></span>Make sure your CV is up-to-date and includes your most relevant experience</li>
+        <li><span class="dot"></span>Upload the complete job description including requirements and responsibilities</li>
+        <li><span class="dot"></span>Files should be clear and readable for the best AI analysis</li>
+      </ul>
+    </div>
   </div>
 <% end %>
