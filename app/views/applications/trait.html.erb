@@ -1,110 +1,105 @@
-
 <h1>Pick a Trait</h1>
 
 <%= form_with url: trait_application_path(@application),
               method: :patch,
-              local: true do |f| %>
+              local: true,
+              html: { id: "traitForm", class: "trait-form" } do |f| %>
 
   <div>
     <label for="trait_choice1">What tone do you prefer for your cover letter?</label>
     <%= select_tag :trait_choice1,
-          options_for_select([["Select your tone...", ""], "Professional and formal", "Friendly and approachable", "Confident and assertive", "Enthusiastic and energetic"]) %>
+          options_for_select([
+            ["Select your tone...", ""],
+            "Professional and formal",
+            "Friendly and approachable",
+            "Confident and assertive",
+            "Enthusiastic and energetic"
+          ]),
+          id: "trait_choice1",
+          required: true %>
   </div>
 
-    <div>
-    <label for="trait_choice1">What is your main professional strength?</label>
+  <div>
+    <label for="trait_choice2">What is your main professional strength?</label>
     <%= select_tag :trait_choice2,
-        options_for_select([
-          ["Select your main strength...", ""],
-          "Technical expertise and problem-solving",
-          "Leadership and team management",
-          "Communication and collaboration",
-          "Innovation and creative thinking",
-          "Analytical and data-driven approach",
-          "Other"
-        ]),
-        id: "trait_choice2" %>
+          options_for_select([
+            ["Select your main strength...", ""],
+            "Technical expertise and problem-solving",
+            "Leadership and team management",
+            "Communication and collaboration",
+            "Innovation and creative thinking",
+            "Analytical and data-driven approach",
+            "Other"
+          ]),
+          id: "trait_choice2",
+          required: true %>
 
-
-  <%= text_field_tag :trait_choice2_other, "",
-        placeholder: "Please specify...",
-        id: "trait_choice2_other",
-        style: "display:none;" %>
+    <%= text_field_tag :trait_choice2_other, "",
+          placeholder: "Please specify...",
+          id: "trait_choice2_other",
+          style: "display:none;" %>
   </div>
 
-
-<div>
+  <div>
     <label for="trait_choice3">How would you describe your experience level in this field?</label>
     <%= select_tag :trait_choice3,
-        options_for_select([
-          ["Select your experience level...", ""],
-          "Entry level (0–2 years)",
-          "Mid-level (3–5 years)",
-          "Senior level (6–10 years)",
-          "Expert level (10+ years)"
-        ]),
-        id: "trait_choice3" %>
-</div>
+          options_for_select([
+            ["Select your experience level...", ""],
+            "Entry level (0–2 years)",
+            "Mid-level (3–5 years)",
+            "Senior level (6–10 years)",
+            "Expert level (10+ years)"
+          ]),
+          id: "trait_choice3",
+          required: true %>
+  </div>
 
-
-<div>
+  <div>
     <label for="trait_choice4">What motivates you most in your career?</label>
     <%= select_tag :trait_choice4,
-        options_for_select([
-          ["Select your motivation...", ""],
-          "Professional growth and learning",
-          "Making a meaningful impact",
-          "Solving complex challenges",
-          "Working with great teams",
-          "Building innovative solutions",
-          "Other"
-        ]),
-        id: "trait_choice4" %>
+          options_for_select([
+            ["Select your motivation...", ""],
+            "Professional growth and learning",
+            "Making a meaningful impact",
+            "Solving complex challenges",
+            "Working with great teams",
+            "Building innovative solutions",
+            "Other"
+          ]),
+          id: "trait_choice4",
+          required: true %>
 
-        <%= text_field_tag :trait_choice4_other, "",
-        placeholder: "Please specify...",
-        id: "trait_choice4_other",
-        style: "display:none;" %>
+    <%= text_field_tag :trait_choice4_other, "",
+          placeholder: "Please specify...",
+          id: "trait_choice4_other",
+          style: "display:none;" %>
+  </div>
 
-</div>
-
-  <%= f.submit "Save and Continue" %>
+  <div class="submit-wrap">
+    <%= f.submit "Save and Continue",
+          id: "nextBtn",
+          class: "next-button disabled-state" %>
+    <p id="formError" style="display:none;color:#c0392b;margin-top:.5rem;">
+      Please fill in all required fields.
+    </p>
+  </div>
 <% end %>
 
+<style>
+  .next-button.disabled-state {
+    background: gray;
+    opacity: .6;
+    cursor: not-allowed;
+  }
+  .next-button.enabled-state {
+    background: #007bff; /* blue */
+    opacity: 1;
+    cursor: pointer;
+  }
+</style>
 
 <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const dropdown = document.getElementById("trait_choice2");
-    const otherField = document.getElementById("trait_choice2_other");
-
-    dropdown.addEventListener("change", () => {
-      if (dropdown.value === "Other") {
-        otherField.style.display = "block";
-      } else {
-        otherField.style.display = "none";
-        otherField.value = "";
-      }
-    });
-  });
-
-
-
-  document.addEventListener("DOMContentLoaded", () => {
-    const dropdown = document.getElementById("trait_choice4");
-    const otherField = document.getElementById("trait_choice4_other");
-
-    dropdown.addEventListener("change", () => {
-      if (dropdown.value === "Other") {
-        otherField.style.display = "block";
-      } else {
-        otherField.style.display = "none";
-        otherField.value = "";
-      }
-    });
-  });
-
-
-    function setupOtherToggle(selectId, inputId) {
+  function setupOtherToggle(selectId, inputId) {
     const dd  = document.getElementById(selectId);
     const box = document.getElementById(inputId);
     if (!dd || !box) return;
@@ -119,35 +114,77 @@
     };
 
     dd.addEventListener("change", toggle);
-    toggle(); // set initial state
+    toggle();
   }
 
-  // Works with both hard refresh and Turbo-driven navigation
+  function setupGate() {
+    const form    = document.getElementById("traitForm");
+    if (!form) return;
+
+    const selects = [
+      document.getElementById("trait_choice1"),
+      document.getElementById("trait_choice2"),
+      document.getElementById("trait_choice3"),
+      document.getElementById("trait_choice4")
+    ];
+    const otherMap = {
+      trait_choice2: document.getElementById("trait_choice2_other"),
+      trait_choice4: document.getElementById("trait_choice4_other")
+    };
+
+    const nextBtn   = document.getElementById("nextBtn");
+    const errorLine = document.getElementById("formError");
+
+    function valid() {
+      for (const s of selects) {
+        if (!s || !s.value || s.value.trim() === "") return false;
+      }
+      for (const key in otherMap) {
+        const s = document.getElementById(key);
+        const t = otherMap[key];
+        if (s && t && s.value === "Other" && (!t.value || t.value.trim() === "")) {
+          return false;
+        }
+      }
+      return true;
+    }
+
+    function updateButton() {
+      if (valid()) {
+        nextBtn.classList.remove("disabled-state");
+        nextBtn.classList.add("enabled-state");
+        errorLine.style.display = "none";
+      } else {
+        nextBtn.classList.add("disabled-state");
+        nextBtn.classList.remove("enabled-state");
+      }
+    }
+
+    const watch = [ ...selects, ...Object.values(otherMap) ].filter(Boolean);
+    watch.forEach(el => {
+      el.addEventListener("input", updateButton);
+      el.addEventListener("change", updateButton);
+    });
+
+    form.addEventListener("submit", (e) => {
+      if (!valid()) {
+        e.preventDefault();
+        errorLine.style.display = "block";
+      }
+    });
+
+    updateButton();
+  }
+
   document.addEventListener("turbo:load", () => {
     setupOtherToggle("trait_choice2", "trait_choice2_other");
-    // call setupOtherToggle for any other dropdowns with "Other"
-    // setupOtherToggle("experience_level", "experience_level_other");
-    // setupOtherToggle("motivation", "motivation_other");
+    setupOtherToggle("trait_choice4", "trait_choice4_other");
+    setupGate();
   });
 
-  // Optional: also support non-Turbo environments
   document.addEventListener("DOMContentLoaded", () => {
     setupOtherToggle("trait_choice2", "trait_choice2_other");
-  });
-
-
-
-
-   // Works with both hard refresh and Turbo-driven navigation
-  document.addEventListener("turbo:load", () => {
     setupOtherToggle("trait_choice4", "trait_choice4_other");
-    // call setupOtherToggle for any other dropdowns with "Other"
-    // setupOtherToggle("experience_level", "experience_level_other");
-    // setupOtherToggle("motivation", "motivation_other");
-  });
-
-  // Optional: also support non-Turbo environments
-  document.addEventListener("DOMContentLoaded", () => {
-    setupOtherToggle("trait_choice4", "trait_choice4_other");
+    setupGate();
   });
 </script>

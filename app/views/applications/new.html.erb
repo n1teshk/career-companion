@@ -35,7 +35,7 @@
     </div>
 
     <div class="submit-btn-wrapper">
-      <%= f.submit "Next →", class: "next-button" %>
+      <%= f.submit "Next →", id: "nextBtn", class: "next-button disabled-state" %>
     </div>
 
     <div class="tips-box">
@@ -48,3 +48,47 @@
     </div>
   </div>
 <% end %>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const form   = document.querySelector(".application-form");
+  const inputs = form.querySelectorAll("input, textarea, select");
+  const nextBtn = document.getElementById("nextBtn");
+
+  function checkAllFilled() {
+    let allValid = true;
+
+    inputs.forEach(input => {
+      if (input.type === "checkbox") {
+        if (!input.checked) allValid = false;
+      } else if (!input.value.trim()) {
+        allValid = false;
+      }
+    });
+
+    if (allValid) {
+      nextBtn.classList.remove("disabled-state");
+      nextBtn.classList.add("enabled-state");
+    } else {
+      nextBtn.classList.add("disabled-state");
+      nextBtn.classList.remove("enabled-state");
+    }
+  }
+
+  checkAllFilled();
+
+  inputs.forEach(input => {
+    input.addEventListener("input", checkAllFilled);
+    input.addEventListener("change", checkAllFilled);
+  });
+
+
+  nextBtn.addEventListener("click", function(e) {
+    if (nextBtn.classList.contains("disabled-state")) {
+      e.preventDefault();
+      alert("Please fill in all required inputs before proceeding.");
+    }
+  });
+});
+</script>
