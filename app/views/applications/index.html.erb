@@ -1,0 +1,4 @@
+<% @applications.each do |application| %>
+<p><%= link_to "Application: #{application.id}", application_path(application) %></p>
+
+<% end %>
