@@ -58,7 +58,10 @@ end
 
     @llm_prompt_cl = <<~PROMPT
     You are an AI career assistant. Based on my applicant profile below,
-    generate a professional cover letter draft for me.
+    generate a professional cover letter draft for me. **NOTICE, do not leave any fields
+    such as [Your name], [Company name], or any similar fields**. All informations should be
+    alble to be found in job description and resume. If not found, notice the user that they have
+    to give sufficient data for you to create that field.
 
     Cover Letter Tone: #{@traits[0]}
     Main Professional Strength: #{@traits[1]}
@@ -67,6 +70,7 @@ end
 
     Instructions:
     - Keep the writing concise (max 3 short paragraphs).
+    - Do not leave any fields such as [Your name], [Company name], or any similar fields
     - Minumin 300 words.
     - Match the selected tone.
     - Highlight the strength of me.
