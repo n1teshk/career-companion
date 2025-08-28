@@ -1,7 +1,144 @@
-<h1>Final Page</h1>
+<h1 class="page-title">Your Final Cover Letter and Video Pitch</h1>
+<h2 class="page-subtitle mb-5">
+  Your final cover letter and video pitch are ready to be used
+</h2>
 
+<div class="container-fluid">
+  <div class="d-flex justify-content-center">
+    <div class="d-flex flex-column" style="max-width: 1400px; width: 100%;">
+      <!-- Parent flexbox container for all three sections -->
+      <div class="d-flex gap-4 justify-content-center">
+        <!-- Your Selections -->
+        <div class="d-flex flex-column" style="flex: 0 0 20%; min-width: 200px;">
+          <h2 class="h5 mb-4 text-center">Your Selections</h2>
+          <div class="d-flex flex-column p-3 border rounded flex-grow-1" style="height: 450px;">
+            <div class="flex-grow-1 p-2 overflow-auto">
+            <div class="mb-3">
+              <h6 class="small text-muted mb-2">Tone</h6>
+              <p class="small mb-0"><%= session[:trait_choice1] || "Not selected" %></p>
+            </div>
 
+            <hr class="my-3">
 
-<%= simple_format(@final_cl) %>
-<p>------------------------------------------------------</p>
-<%= simple_format(@final_pitch) %>
+            <div class="mb-3">
+              <h6 class="small text-muted mb-2">Professional Strength</h6>
+              <p class="small mb-0">
+                <% if session[:trait_choice2] == "Other" %>
+                  <%= session[:trait_choice2_other] || "Not specified" %>
+                <% else %>
+                  <%= session[:trait_choice2] || "Not selected" %>
+                <% end %>
+              </p>
+            </div>
+
+            <hr class="my-3">
+
+            <div class="mb-3">
+              <h6 class="small text-muted mb-2">Experience Level</h6>
+              <p class="small mb-0"><%= session[:trait_choice3] || "Not selected" %></p>
+            </div>
+
+            <hr class="my-3">
+
+            <div class="mb-3">
+              <h6 class="small text-muted mb-2">Career Motivation</h6>
+              <p class="small mb-0">
+                <% if session[:trait_choice4] == "Other" %>
+                  <%= session[:trait_choice4_other] || "Not specified" %>
+                <% else %>
+                  <%= session[:trait_choice4] || "Not selected" %>
+                <% end %>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <!-- Final Cover Letter -->
+        <div class="d-flex flex-column" style="flex: 0 0 40%; min-width: 300px;">
+          <h2 class="h5 mb-4 text-center">Final Cover Letter</h2>
+        <div class="d-flex flex-column p-3 border rounded flex-grow-1" style="height: 450px;">
+          <div id="cl_output" class="flex-grow-1 mb-3 p-2 overflow-auto">
+            <%= simple_format(@final_cl || @application.finals.last&.final_cl || "No cover letter generated yet") %>
+          </div>
+          <button type="button" id="copy-cl-btn" class="btn btn-primary w-100" onclick="copyCoverLetter()">
+            <span id="copy-cl-text">Copy to Clipboard</span>
+          </button>
+        </div>
+      </div>
+
+        <!-- Final Video Pitch -->
+        <div class="d-flex flex-column" style="flex: 0 0 40%; min-width: 300px;">
+          <h2 class="h5 mb-4 text-center">Final Video Pitch</h2>
+        <div class="d-flex flex-column p-3 border rounded flex-grow-1" style="height: 450px;">
+          <div id="video_output" class="flex-grow-1 mb-3 p-2 overflow-auto">
+            <%= simple_format(@final_pitch || @application.finals.last&.final_pitch || "No video pitch generated yet") %>
+          </div>
+          <button type="button" id="copy-pitch-btn" class="btn btn-primary w-100" onclick="copyVideoPitch()">
+            <span id="copy-pitch-text">Copy to Clipboard</span>
+          </button>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex justify-content-center my-5">
+    <%= link_to "Back to Dashboard", dashboard_path, class: "btn btn-secondary px-4 py-2 me-3" %>
+    <%= link_to "Create New Application", new_application_path, class: "btn btn-success px-4 py-2" %>
+  </div>
+</div>
+
+<script>
+  function copyCoverLetter() {
+    const clOutput = document.getElementById("cl_output");
+    const clText = clOutput.innerText;
+    const copyBtn = document.getElementById("copy-cl-btn");
+    const copyText = document.getElementById("copy-cl-text");
+
+    navigator.clipboard.writeText(clText).then(function() {
+      copyText.textContent = "Copied ✓";
+      copyBtn.classList.remove("btn-primary");
+      copyBtn.classList.add("btn-success");
+
+      setTimeout(function() {
+        copyText.textContent = "Copy to Clipboard";
+        copyBtn.classList.remove("btn-success");
+        copyBtn.classList.add("btn-primary");
+      }, 2000);
+    }).catch(function(err) {
+      console.error('Failed to copy: ', err);
+      copyText.textContent = "Copy failed";
+
+      setTimeout(function() {
+        copyText.textContent = "Copy to Clipboard";
+      }, 2000);
+    });
+  }
+
+  function copyVideoPitch() {
+    const pitchOutput = document.getElementById("video_output");
+    const pitchText = pitchOutput.innerText;
+    const copyBtn = document.getElementById("copy-pitch-btn");
+    const copyText = document.getElementById("copy-pitch-text");
+
+    navigator.clipboard.writeText(pitchText).then(function() {
+      copyText.textContent = "Copied ✓";
+      copyBtn.classList.remove("btn-primary");
+      copyBtn.classList.add("btn-success");
+
+      setTimeout(function() {
+        copyText.textContent = "Copy to Clipboard";
+        copyBtn.classList.remove("btn-success");
+        copyBtn.classList.add("btn-primary");
+      }, 2000);
+    }).catch(function(err) {
+      console.error('Failed to copy: ', err);
+      copyText.textContent = "Copy failed";
+
+      setTimeout(function() {
+        copyText.textContent = "Copy to Clipboard";
+      }, 2000);
+    });
+  }
+</script>
