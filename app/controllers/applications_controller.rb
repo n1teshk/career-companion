@@ -29,6 +29,17 @@ class ApplicationsController < ApplicationController
     end
   end
 
+
+  def destroy
+    @application = Application.find(params[:id])
+    if @application.destroy
+    redirect_to applications_path, notice: "Application deleted.", status: :see_other
+  else
+    redirect_to applications_path, alert: "Could not delete.", status: :unprocessable_entity
+  end
+end
+
+
   def trait
     @application = Application.find(params[:id])
     return unless request.patch?
