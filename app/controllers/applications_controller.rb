@@ -5,6 +5,10 @@ class ApplicationsController < ApplicationController
     @application = Application.new
   end
 
+  def index
+    @applications = current_user.applications
+  end
+
   def show
     @application = Application.find(params[:id])
     @final = @application.finals.last
