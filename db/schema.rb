@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_08_26_142510) do
+ActiveRecord::Schema[7.1].define(version: 2025_08_28_094929) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -61,14 +61,12 @@ ActiveRecord::Schema[7.1].define(version: 2025_08_26_142510) do
   end
 
   create_table "finals", force: :cascade do |t|
-    t.bigint "cl_id", null: false
-    t.bigint "pitch_id", null: false
     t.bigint "application_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "cl"
+    t.text "pitch"
     t.index ["application_id"], name: "index_finals_on_application_id"
-    t.index ["cl_id"], name: "index_finals_on_cl_id"
-    t.index ["pitch_id"], name: "index_finals_on_pitch_id"
   end
 
   create_table "pitches", force: :cascade do |t|
@@ -97,7 +95,5 @@ ActiveRecord::Schema[7.1].define(version: 2025_08_26_142510) do
   add_foreign_key "applications", "users"
   add_foreign_key "cls", "applications"
   add_foreign_key "finals", "applications"
-  add_foreign_key "finals", "cls"
-  add_foreign_key "finals", "pitches"
   add_foreign_key "pitches", "applications"
 end

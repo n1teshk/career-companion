@@ -4,18 +4,44 @@
               method: :post,
               class: "btn btn-primary" %>
 
+<%= form_with url: final_cl_application_path(@application), method: :post, id: "final-cl-form" do %>
+  <%= hidden_field_tag :final_cl, "", id: "final_cl_input" %>
+  <%= submit_tag "Finalize CL", class: "btn btn-primary" %>
+<% end %>
+
 
 <div id="cl_output">
 <%= simple_format(@cl_message) %>
 </div>
 
 
-<%= button_to "Re-Generate Video", generate_video_application_path(@application, prompt_video: @llm_prompt_video),
+<%= button_to "Re-Generate Pitch", generate_video_application_path(@application, prompt_video: @llm_prompt_video),
               method: :post,
               class: "btn btn-primary" %>
+
+<%= form_with url: final_pitch_application_path(@application), method: :post, id: "final-pitch-form" do %>
+  <%= hidden_field_tag :final_pitch, "", id: "final_pitch_input" %>
+  <%= submit_tag "Finalize Pitch", class: "btn btn-primary" %>
+<% end %>
 
 
 
 <div id="video_output">
 <%= simple_format(@video_message) %>
 </div>
+
+
+<%= link_to "Final Page", application_path(@application), class: "btn btn-primary"%>
+
+<script>
+  document.getElementById("final-cl-form").addEventListener("submit", () => {
+    const clOutput = document.getElementById("cl_output");
+    document.getElementById("final_cl_input").value = clOutput.innerText;
+  });
+
+
+  document.getElementById("final-pitch-form").addEventListener("submit", () => {
+    const pitchOutput = document.getElementById("video_output");
+    document.getElementById("final_pitch_input").value = pitchOutput.innerText;
+  });
+</script>

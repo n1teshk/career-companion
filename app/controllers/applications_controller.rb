@@ -5,12 +5,21 @@ class ApplicationsController < ApplicationController
     @application = Application.new
   end
 
+  def show
+    @application = Application.find(params[:id])
+    @final = @application.finals.last
+
+    @final_cl = @final.cl
+    @final_pitch = @final.pitch
+  end
+
   def create
     @application = Application.new(application_params)
     @application.user = current_user
 
     if @application.save
       redirect_to trait_application_path(@application), notice: "Application created!", status: :see_other
+      @application.finals.create()
     else
       render :new, status: :unprocessable_entity
     end
@@ -119,6 +128,24 @@ Output format:
     format.html { redirect_to overview_application_path(@application), notice: "Video generated." }
     format.turbo_stream
     end
+  end
+
+
+  def final_cl
+    @application = Application.find(params[:id])
+    @final_cl = params[:final_cl].to_s
+    @final = @application.finals.last
+    @final.cl = @final_cl
+    @final.save
+  end
+
+
+  def final_pitch
+    @application = Application.find(params[:id])
+    @final_pitch = params[:final_pitch].to_s
+    @final = @application.finals.last
+    @final.pitch = @final_pitch
+    @final.save
   end
 
 

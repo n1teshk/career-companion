@@ -21,6 +21,8 @@ Rails.application.routes.draw do
     get  :overview
     post :generate_cl
     post :generate_video
+    post :final_cl
+    post :final_pitch
   end
 
 
