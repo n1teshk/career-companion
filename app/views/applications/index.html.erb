@@ -1,0 +1,16 @@
+
+<h3>Dashboard for: <%= @applications[0].user.email %></h3>
+
+<h3>Totoal Application Created: <%= @applications.count %></h3>
+
+<% @applications.each do |application| %>
+<p><%= link_to "Application: #{application.id}", application_path(application)%>
+
+<%= button_to "Delete Application",
+              application_path(application),
+              method: :delete,
+              data: { turbo_confirm: "Are you sure you want to delete this application?" },
+              class: "btn btn-primary" %>
+</p>
+
+<% end %>

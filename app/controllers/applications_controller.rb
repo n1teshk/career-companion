@@ -5,6 +5,10 @@ class ApplicationsController < ApplicationController
     @application = Application.new
   end
 
+  def index
+    @applications = current_user.applications
+  end
+
   def show
     @application = Application.find(params[:id])
     @final = @application.finals.last
@@ -24,6 +28,17 @@ class ApplicationsController < ApplicationController
       render :new, status: :unprocessable_entity
     end
   end
+
+
+  def destroy
+    @application = Application.find(params[:id])
+    if @application.destroy
+    redirect_to applications_path, notice: "Application deleted.", status: :see_other
+  else
+    redirect_to applications_path, alert: "Could not delete.", status: :unprocessable_entity
+  end
+end
+
 
   def trait
     @application = Application.find(params[:id])
