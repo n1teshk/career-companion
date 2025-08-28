@@ -3,22 +3,34 @@
   Upload your CV and the job description to get started with AI-powered application assistance
 </h2>
 
-<%= simple_form_for @application, html: { class: 'application-form', multipart: true } do |f| %>
+<%= simple_form_for @application, html: { class: 'application-form', multipart: true, data: { controller: "application-form" } } do |f| %>
   <div class="application-main-container">
     <div class="input-pair-container">
-      <!-- CV Upload -->
+
       <div class="file-upload-container">
         <label class="block-label">Your CV</label>
         <label class="file-upload">
-          <%= f.file_field :cv, accept: 'application/pdf', class: 'hidden-file-input' %>
-          <div class="upload-icon">
+          <%= f.file_field :cv,
+                accept: 'application/pdf',
+                class: 'hidden-file-input',
+                data: {
+                  application_form_target: "fileInput",
+                  action: "change->application-form#handleFileChange"
+                } %>
+
+          <div class="upload-icon" data-application-form-target="uploadIcon">
             <svg xmlns="http://www.w3.org/2000/svg" class="icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1M12 12V4m0 0L8 8m4-4l4 4" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1M12 12V4m0 0L8 8m4-4l4 4" />
             </svg>
           </div>
-          <p class="upload-text-main">Drag and drop your CV here or click to browse</p>
+
+          <p class="upload-text-main" data-application-form-target="filePreview">
+            Drag and drop your CV here or click to browse
+          </p>
           <p class="upload-text-sub">Supports .pdf, .docx, .doc files up to 10MB</p>
         </label>
+
         <% if @application.errors[:cv].any? %>
           <div class="field-error"><%= @application.errors[:cv].first %></div>
         <% end %>
@@ -27,7 +39,14 @@
       <!-- Job Description -->
       <div class="text-input-container">
         <label class="block-label">Job Description</label>
-        <%= f.text_area :job_d, placeholder: "Paste the job description here as plain text...", rows: 12, class: 'job-description-textarea' %>
+        <%= f.text_area :job_d,
+              placeholder: "Paste the job description here as plain text...",
+              rows: 12,
+              class: 'job-description-textarea',
+              data: {
+                application_form_target: "textInput",
+                action: "input->application-form#handleTextInput change->application-form#handleTextInput"
+              } %>
         <% if @application.errors[:job_d].any? %>
           <div class="field-error"><%= @application.errors[:job_d].first %></div>
         <% end %>
@@ -35,7 +54,13 @@
     </div>
 
     <div class="submit-btn-wrapper">
-      <%= f.submit "Next →", id: "nextBtn", class: "next-button disabled-state" %>
+      <%= f.submit "Next →",
+            id: "nextBtn",
+            class: "next-button disabled-state",
+            data: {
+              application_form_target: "submitBtn",
+              action: "click->application-form#validateSubmit"
+            } %>
     </div>
 
     <div class="tips-box">
@@ -48,47 +73,3 @@
     </div>
   </div>
 <% end %>
-
-
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-  const form   = document.querySelector(".application-form");
-  const inputs = form.querySelectorAll("input, textarea, select");
-  const nextBtn = document.getElementById("nextBtn");
-
-  function checkAllFilled() {
-    let allValid = true;
-
-    inputs.forEach(input => {
-      if (input.type === "checkbox") {
-        if (!input.checked) allValid = false;
-      } else if (!input.value.trim()) {
-        allValid = false;
-      }
-    });
-
-    if (allValid) {
-      nextBtn.classList.remove("disabled-state");
-      nextBtn.classList.add("enabled-state");
-    } else {
-      nextBtn.classList.add("disabled-state");
-      nextBtn.classList.remove("enabled-state");
-    }
-  }
-
-  checkAllFilled();
-
-  inputs.forEach(input => {
-    input.addEventListener("input", checkAllFilled);
-    input.addEventListener("change", checkAllFilled);
-  });
-
-
-  nextBtn.addEventListener("click", function(e) {
-    if (nextBtn.classList.contains("disabled-state")) {
-      e.preventDefault();
-      alert("Please fill in all required inputs before proceeding.");
-    }
-  });
-});
-</script>
