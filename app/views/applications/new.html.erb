@@ -1,74 +1,86 @@
 <h1 class="page-title">Create New Application</h1>
-<h2 class="page-subtitle">
+<h2 class="page-subtitle mb-5">
   Upload your CV and the job description to get started with AI-powered application assistance
 </h2>
 
-<%= simple_form_for @application, html: { class: 'application-form', multipart: true, data: { controller: "application-form" } } do |f| %>
-  <div class="application-main-container">
-    <div class="input-pair-container">
+<div class="d-flex flex-column align-items-center">
+  <div style="width: 1400px; max-width: 100%;">
+    <%= simple_form_for @application, html: { class: 'application-form w-100', multipart: true, data: { controller: "application-form" } } do |f| %>
+      <div class="container-fluid px-0">
+        <div class="d-flex justify-content-center">
+          <div class="d-flex flex-column" style="width: 1400px; max-width: 100%;">
+            <div class="d-flex gap-4 justify-content-center">
+              <div class="d-flex flex-column" style="width: 280px; flex-shrink: 0;">
+                <h2 class="h5 mb-4 text-center">Tips for best results</h2>
+                <div class="d-flex flex-column p-3 border rounded flex-grow-1" style="height: 450px;">
+                  <div class="flex-grow-1 p-2 overflow-auto">
+                    <ul>
+                      <li class="mb-3"><span class="dot me-2"></span>Make sure your CV is up-to-date and includes your most relevant experience</li>
+                      <li class="mb-3"><span class="dot me-2"></span>Upload the complete job description including requirements and responsibilities</li>
+                      <li class="mb-3"><span class="dot me-2"></span>Files should be clear and readable for the best AI analysis</li>
+                      <li class="mb-3"><span class="dot me-2"></span>Include your preferences and customizations</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
 
-      <div class="file-upload-container">
-        <label class="block-label">Your CV</label>
-        <label class="file-upload">
-          <%= f.file_field :cv,
-                accept: 'application/pdf',
-                class: 'hidden-file-input',
-                data: {
-                  application_form_target: "fileInput",
-                  action: "change->application-form#handleFileChange"
-                } %>
+              <div class="d-flex flex-column" style="width: 560px; flex-shrink: 0;">
+                <h2 class="h5 mb-4 text-center">Your CV</h2>
+                <div class="d-flex flex-column p-3 border rounded flex-grow-1" style="height: 450px;">
+                  <div class="flex-grow-1 d-flex align-items-center justify-content-center">
+                    <label class="file-upload w-100 h-100 d-flex flex-column align-items-center justify-content-center">
+                      <%= f.file_field :cv,
+                          accept: 'application/pdf',
+                          class: 'hidden-file-input',
+                          data: {
+                            application_form_target: "fileInput",
+                            action: "change->application-form#handleFileChange"
+                          } %>
 
-          <div class="upload-icon" data-application-form-target="uploadIcon">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1M12 12V4m0 0L8 8m4-4l4 4" />
-            </svg>
+                      <div class="upload-icon mb-3" data-application-form-target="uploadIcon">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1M12 12V4m0 0L8 8m4-4l4 4" />
+                        </svg>
+                      </div>
+
+                      <p class="upload-text-main text-center" data-application-form-target="filePreview">
+                        Drag and drop your CV here or click to browse
+                      </p>
+                      <p class="upload-text-sub text-center">Supports .pdf, .docx, .doc files up to 10MB</p>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="d-flex flex-column" style="width: 560px; flex-shrink: 0;">
+                <h2 class="h5 mb-4 text-center">Job Description</h2>
+                <div class="d-flex flex-column p-3 border rounded flex-grow-1" style="height: 450px;">
+                  <div class="flex-grow-1">
+                    <%= f.text_area :job_d,
+                        placeholder: "Paste the job description here as plain text...",
+                        class: 'job-description-textarea w-100 h-100 border-0',
+                        style: 'resize: none; outline: none;',
+                        data: {
+                          application_form_target: "textInput",
+                          action: "input->application-form#handleTextInput change->application-form#handleTextInput"
+                        } %>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="d-flex justify-content-center mt-4">
+              <%= f.submit "Next →",
+                  id: "nextBtn",
+                  class: "next-button disabled-state",
+                  data: {
+                    application_form_target: "submitBtn",
+                    action: "click->application-form#validateSubmit"
+                  } %>
+            </div>
           </div>
-
-          <p class="upload-text-main" data-application-form-target="filePreview">
-            Drag and drop your CV here or click to browse
-          </p>
-          <p class="upload-text-sub">Supports .pdf, .docx, .doc files up to 10MB</p>
-        </label>
-
-        <% if @application.errors[:cv].any? %>
-          <div class="field-error"><%= @application.errors[:cv].first %></div>
-        <% end %>
+        </div>
       </div>
-
-      <div class="text-input-container">
-        <label class="block-label">Job Description</label>
-        <%= f.text_area :job_d,
-              placeholder: "Paste the job description here as plain text...",
-              rows: 12,
-              class: 'job-description-textarea',
-              data: {
-                application_form_target: "textInput",
-                action: "input->application-form#handleTextInput change->application-form#handleTextInput"
-              } %>
-        <% if @application.errors[:job_d].any? %>
-          <div class="field-error"><%= @application.errors[:job_d].first %></div>
-        <% end %>
-      </div>
-    </div>
-
-    <div class="submit-btn-wrapper">
-      <%= f.submit "Next →",
-            id: "nextBtn",
-            class: "next-button disabled-state",
-            data: {
-              application_form_target: "submitBtn",
-              action: "click->application-form#validateSubmit"
-            } %>
-    </div>
-
-    <div class="tips-box">
-      <h3>Tips for best results:</h3>
-      <ul>
-        <li><span class="dot"></span>Make sure your CV is up-to-date and includes your most relevant experience</li>
-        <li><span class="dot"></span>Upload the complete job description including requirements and responsibilities</li>
-        <li><span class="dot"></span>Files should be clear and readable for the best AI analysis</li>
-      </ul>
-    </div>
+    <% end %>
   </div>
-<% end %>
+</div>
