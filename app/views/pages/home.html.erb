@@ -1,26 +1,278 @@
-    <div>PitchUpYourLife</div>
-    <ul>
-      <li><%= link_to "Dashboard", applications_path %></li>
-      <li><%= link_to "New Application", new_application_path %></li>
-    </ul>
-    <div>
-      <%= link_to "Log In", new_user_session_path %>
-      <%= link_to "Sign Up", new_user_registration_path %>
-    </div>
-  </nav>
-</header>
-<main>
-  <section>
-    <h1>AI-Powered Job Applications</h1>
-    <p>
-      Upload your CV and job description, then generate personalized cover letters,
-      company insights, and video pitch scripts. Land your dream job with AI assistance.
-    </p>
-    <div>
-      <%= link_to "Create Application", new_application_path %>
-    </div>
-  </section>
-</main>
-<footer>
-  © 2025 PitchUpYourLife. All rights reserved.
-</footer>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PitchUpYourLife</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .hero-section {
+            background-color: #ffffff;
+        }
+        .features-section, .testimonials-section {
+            background-color: #f8f9fa;
+        }
+        .cta-section {
+            background-color: #4f46e5;
+        }
+        .icon-box {
+            width: 4rem;
+            height: 4rem;
+            background-color: #e0e7ff;
+            color: #4f46e5;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .how-it-works-icon-box {
+            width: 4rem;
+            height: 4rem;
+            background-color: #4f46e5;
+            color: #ffffff;
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .testimonial-img {
+            width: 2.5rem;
+            height: 2.5rem;
+            background-color: #adb5bd;
+            border-radius: 9999px;
+        }
+    </style>
+</head>
+<body>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero-section py-5 py-md-5">
+            <div class="container text-center py-5">
+                <h1 class="display-3 fw-bold text-dark mb-4">AI-Powered Job Applications</h1>
+                <p class="lead text-secondary mx-auto mb-5" style="max-width: 600px;">
+                    Upload your CV and job description, then generate personalized cover letters,
+                    company insights, and video pitch scripts. Land your dream job with AI assistance.
+                </p>
+                <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center">
+                    <a href="/applications/new" class="btn btn-primary btn-lg rounded-lg px-5 py-3 d-flex align-items-center justify-content-center">
+                        Create Application
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features" class="features-section py-5 py-md-5">
+            <div class="container text-center py-5">
+                <h2 class="display-5 fw-bold text-dark mb-2">Everything you need to succeed</h2>
+                <p class="lead text-secondary mx-auto mb-5" style="max-width: 700px;">
+                    Our AI analyzes your profile and target job to create personalized application materials.
+                </p>
+                <div class="row g-4 justify-content-center">
+                    <div class="col-md-4">
+                        <div class="card h-100 shadow-sm p-4 text-center border-0 rounded-lg">
+                            <div class="icon-box mx-auto mb-4">
+                                <i class="bi bi-chat-square fs-3"></i>
+                            </div>
+                            <h3 class="h5 fw-bold text-dark mb-2">Smart Cover Letters</h3>
+                            <p class="text-secondary">
+                                AI analyzes the job description and your experience to craft compelling,
+                                personalized cover letters that get noticed.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card h-100 shadow-sm p-4 text-center border-0 rounded-lg">
+                            <div class="icon-box mx-auto mb-4">
+                                <i class="bi bi-check-circle fs-3"></i>
+                            </div>
+                            <h3 class="h5 fw-bold text-dark mb-2">Company Insights</h3>
+                            <p class="text-secondary">
+                                Get detailed company analysis and talking points to show you've done your research
+                                and understand their business.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card h-100 shadow-sm p-4 text-center border-0 rounded-lg">
+                            <div class="icon-box mx-auto mb-4">
+                                <i class="bi bi-person fs-3"></i>
+                            </div>
+                            <h3 class="h5 fw-bold text-dark mb-2">Video Pitch Scripts</h3>
+                            <p class="text-secondary">
+                                Receive professionally crafted video pitch scripts tailored to your background
+                                and the specific role you're applying for.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How It Works Section -->
+        <section id="how-it-works" class="py-5 py-md-5">
+            <div class="container text-center py-5">
+                <h2 class="display-5 fw-bold text-dark mb-2">How it works</h2>
+                <p class="lead text-secondary mx-auto mb-5" style="max-width: 700px;">
+                    Get professional application materials in three simple steps.
+                </p>
+                <div class="row g-4 justify-content-center">
+                    <div class="col-md-4">
+                        <div class="text-center">
+                            <div class="how-it-works-icon-box mx-auto mb-4">
+                                <i class="bi bi-cloud-arrow-up fs-3"></i>
+                            </div>
+                            <div class="mb-3">
+                                <span class="badge rounded-pill bg-light text-primary fw-bold p-2">1</span>
+                            </div>
+                            <h3 class="h5 fw-bold text-dark mb-2">Upload JD & CV</h3>
+                            <p class="text-secondary">
+                                Simply upload your CV and the job description. Our AI analyzes both documents
+                                to understand your background and the role requirements.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="text-center">
+                            <div class="how-it-works-icon-box mx-auto mb-4">
+                                <i class="bi bi-chat-square fs-3"></i>
+                            </div>
+                            <div class="mb-3">
+                                <span class="badge rounded-pill bg-light text-primary fw-bold p-2">2</span>
+                            </div>
+                            <h3 class="h5 fw-bold text-dark mb-2">Get AI-powered suggestions</h3>
+                            <p class="text-secondary">
+                                Our AI generates personalized suggestions for cover letters, company insights,
+                                and pitch scripts based on your profile and the job requirements.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="text-center">
+                            <div class="how-it-works-icon-box mx-auto mb-4">
+                                <i class="bi bi-check-circle fs-3"></i>
+                            </div>
+                            <div class="mb-3">
+                                <span class="badge rounded-pill bg-light text-primary fw-bold p-2">3</span>
+                            </div>
+                            <h3 class="h5 fw-bold text-dark mb-2">Review & finalize</h3>
+                            <p class="text-secondary">
+                                Review all generated materials, make final edits, and download your complete
+                                application package ready for submission.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section id="testimonials" class="testimonials-section py-5 py-md-5">
+            <div class="container text-center py-5">
+                <h2 class="display-5 fw-bold text-dark mb-2">Loved by job seekers</h2>
+                <p class="lead text-secondary mx-auto mb-5" style="max-width: 700px;">
+                    See what our users say about their experience.
+                </p>
+                <div class="row g-4 justify-content-center">
+                    <div class="col-md-4">
+                        <div class="card h-100 shadow-sm p-4 text-start border-0 rounded-lg">
+                            <div class="d-flex mb-3">
+                                <i class="bi bi-star-fill text-warning"></i>
+                                <i class="bi bi-star-fill text-warning"></i>
+                                <i class="bi bi-star-fill text-warning"></i>
+                                <i class="bi bi-star-fill text-warning"></i>
+                                <i class="bi bi-star-fill text-warning"></i>
+                            </div>
+                            <p class="fst-italic text-secondary mb-4">
+                                "PitchUpYourLife helped me land interviews at 3 top tech companies. The cover letters
+                                were so much better than what I could write myself."
+                            </p>
+                            <div class="d-flex align-items-center">
+                                <div class="testimonial-img me-3"></div>
+                                <div>
+                                    <p class="fw-bold text-dark mb-0">Sarah Chen</p>
+                                    <p class="text-sm text-secondary mb-0">Software Engineer</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card h-100 shadow-sm p-4 text-start border-0 rounded-lg">
+                            <div class="d-flex mb-3">
+                                <i class="bi bi-star-fill text-warning"></i>
+                                <i class="bi bi-star-fill text-warning"></i>
+                                <i class="bi bi-star-fill text-warning"></i>
+                                <i class="bi bi-star-fill text-warning"></i>
+                                <i class="bi bi-star-fill text-warning"></i>
+                            </div>
+                            <p class="fst-italic text-secondary mb-4">
+                                "The company insights were incredibly detailed. I felt so prepared for my interviews
+                                and got the job at my dream startup!"
+                            </p>
+                            <div class="d-flex align-items-center">
+                                <div class="testimonial-img me-3"></div>
+                                <div>
+                                    <p class="fw-bold text-dark mb-0">Michael Rodriguez</p>
+                                    <p class="text-sm text-secondary mb-0">Product Manager</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card h-100 shadow-sm p-4 text-start border-0 rounded-lg">
+                            <div class="d-flex mb-3">
+                                <i class="bi bi-star-fill text-warning"></i>
+                                <i class="bi bi-star-fill text-warning"></i>
+                                <i class="bi bi-star-fill text-warning"></i>
+                                <i class="bi bi-star-fill text-warning"></i>
+                                <i class="bi bi-star-fill text-warning"></i>
+                            </div>
+                            <p class="fst-italic text-secondary mb-4">
+                                "I was struggling with video interviews until I used the pitch scripts.
+                                They gave me the confidence and structure I needed."
+                            </p>
+                            <div class="d-flex align-items-center">
+                                <div class="testimonial-img me-3"></div>
+                                <div>
+                                    <p class="fw-bold text-dark mb-0">Emily Johnson</p>
+                                    <p class="text-sm text-secondary mb-0">Marketing Specialist</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta-section py-5 py-md-5 rounded-lg">
+            <div class="container text-center py-5">
+                <h2 class="display-5 fw-bold text-white mb-4">Ready to land your dream job?</h2>
+                <p class="lead text-light mb-5" style="max-width: 600px; margin: auto;">
+                    Join thousands of successful job seekers using AI to get hired faster.
+                </p>
+                <a href="/users/sign_up" class="btn btn-light btn-lg rounded-lg px-5 py-3 d-inline-flex align-items-center">
+                    Start Your Application
+                    <i class="bi bi-arrow-right ms-2"></i>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-center py-4 text-secondary">
+        © 2025 PitchUpYourLife. All rights reserved.
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
