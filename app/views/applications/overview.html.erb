@@ -307,20 +307,24 @@
         const clHidden = document.getElementById("final_cl_input");
         if (clHidden && clOutput) clHidden.value = clOutput.innerText || clOutput.textContent || "";
 
-        // disable and mark button
+        // Allow form to submit but update UI immediately
         const submitBtn = event.target.querySelector('input[type="submit"], button[type="submit"]');
         if (submitBtn) {
-          submitBtn.disabled = true;
-          // support both <input> and <button>
-          if (submitBtn.tagName === 'INPUT') submitBtn.value = "Finalized ✓";
-          else submitBtn.textContent = "Finalized ✓";
-          submitBtn.classList.remove("btn-primary");
-          submitBtn.classList.add("btn-success");
+          // Update UI after a short delay to allow form submission
+          setTimeout(() => {
+            submitBtn.disabled = true;
+            // support both <input> and <button>
+            if (submitBtn.tagName === 'INPUT') submitBtn.value = "Finalized ✓";
+            else submitBtn.textContent = "Finalized ✓";
+            submitBtn.classList.remove("btn-primary");
+            submitBtn.classList.add("btn-success");
+            
+            // update shared state
+            window.appState.clFinalized = true;
+            updateFinalButton();
+          }, 100);
         }
-
-        // update shared state
-        window.appState.clFinalized = true;
-        updateFinalButton();
+        // Don't prevent default - let the form submit
       });
     }
 
@@ -333,15 +337,19 @@
 
         const submitBtn = event.target.querySelector('input[type="submit"], button[type="submit"]');
         if (submitBtn) {
-          submitBtn.disabled = true;
-          if (submitBtn.tagName === 'INPUT') submitBtn.value = "Finalized ✓";
-          else submitBtn.textContent = "Finalized ✓";
-          submitBtn.classList.remove("btn-primary");
-          submitBtn.classList.add("btn-success");
+          // Update UI after a short delay to allow form submission
+          setTimeout(() => {
+            submitBtn.disabled = true;
+            if (submitBtn.tagName === 'INPUT') submitBtn.value = "Finalized ✓";
+            else submitBtn.textContent = "Finalized ✓";
+            submitBtn.classList.remove("btn-primary");
+            submitBtn.classList.add("btn-success");
+            
+            window.appState.pitchFinalized = true;
+            updateFinalButton();
+          }, 100);
         }
-
-        window.appState.pitchFinalized = true;
-        updateFinalButton();
+        // Don't prevent default - let the form submit
       });
     }
 
