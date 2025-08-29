@@ -1,6 +1,9 @@
 
 <%= turbo_stream.replace "video_output" do %>
-  <div id="video_output">
-    <%= simple_format(@message) %>
+  <div id="video_output"
+              class="mb-3 p-2 overflow-auto"
+              style="flex: 1; min-height: 0; max-height: calc(100% - 60px);"
+            >
+              <%= simple_format(@message) %>
   </div>
 <% end %>

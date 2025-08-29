@@ -1,5 +1,8 @@
 <%= turbo_stream.replace "cl_output" do %>
-  <div id="cl_output">
-    <%= simple_format(@message) %>
+  <div id="cl_output"
+              class="mb-3 p-2 overflow-auto"
+              style="flex: 1; min-height: 0; max-height: calc(100% - 60px);"
+            >
+              <%= simple_format(@message) %>
   </div>
 <% end %>
