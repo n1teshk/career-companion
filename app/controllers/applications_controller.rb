@@ -114,8 +114,9 @@ Output format:
    [1:10] ...
   PROMPT
 
-  generate_cl_internal(@llm_prompt_cl)
-  generate_video_internal(@llm_prompt_video)
+
+  CreateClJob.perform_later(@application.id, @llm_prompt_cl)
+  CreatePitchJob.perform_later(@application.id, @llm_prompt_video)
   end
 
 
