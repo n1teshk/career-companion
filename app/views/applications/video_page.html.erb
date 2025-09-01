@@ -1,0 +1,22 @@
+<div data-controller="video" data-video-application-id-value="<%= params[:id] %>">
+
+  <h2>Record Your Video</h2>
+
+  <button type="button" id="start">Start</button>
+  <button type="button" id="stop">Stop and upload</button>
+
+  <div>
+    <video id="live" width="300" height="200" autoplay muted style="border:1px solid black;"></video>
+  </div>
+
+  <h2>Uploaded Video</h2>
+  <% if @video&.file&.attached? %>
+    <video width="400" height="300" controls>
+      <source src="<%= url_for(@video.file) %>" type="<%= @video.file.content_type %>">
+      Your browser does not support the video tag.
+    </video>
+  <% else %>
+    <p>No video uploaded yet.</p>
+  <% end %>
+
+</div>

@@ -28,6 +28,7 @@ class ApplicationsController < ApplicationController
 
       redirect_to trait_application_path(@application), notice: "Application created!", status: :see_other
       @application.finals.create()
+      @application.videos.create()
     else
       render :new, status: :unprocessable_entity
     end
@@ -326,7 +327,6 @@ end
     end
   end
 
-
   def final_cl
     @application = Application.find(params[:id])
     @final_cl = params[:final_cl].to_s
@@ -334,7 +334,6 @@ end
     @final.cl = @final_cl
     @final.save
   end
-
 
   def final_pitch
     @application = Application.find(params[:id])
@@ -344,6 +343,27 @@ end
     @final.save
   end
 
+  def video_page
+    @application = Application.find(params[:id])
+    @video = @application.videos.last
+  end
+
+  def new_video
+    @video = @application.videos.build
+  end
+
+  def create_video
+    puts 'UPLOAD VIDEO'
+
+    @application = Application.find(params[:id])
+    @video = @application.videos.build
+    @video.file = params[:video]
+    if @video.save
+      redirect_to video_page_application_path(@application), notice: "Video was successfully created."
+    else
+      render :new_video, status: :unprocessable_entity
+    end
+  end
 
 
   private
@@ -383,23 +403,22 @@ end
 
 
   def generate_cl_internal(prompt)
-  cv_file   = CvTextExtractor.call(@application)
-  chat      = RubyLLM.chat
-  chat.with_instructions(prompt)
-  response  = chat.ask("Help me generate the paragraphs with the job description here: #{@application.job_d}, my resume is here: #{cv_file}, please refer to
-      my resume when generating the contents.")
-  @cl_message = response.content
-end
+    cv_file   = CvTextExtractor.call(@application)
+    chat      = RubyLLM.chat
+    chat.with_instructions(prompt)
+    response  = chat.ask("Help me generate the paragraphs with the job description here: #{@application.job_d}, my resume is here: #{cv_file}, please refer to
+        my resume when generating the contents.")
+    @cl_message = response.content
+  end
 
-def generate_video_internal(prompt)
-  cv_file   = CvTextExtractor.call(@application)
-  chat      = RubyLLM.chat
-  chat.with_instructions(prompt)
-  response  = chat.ask("Help me generate the pitch with the job description here: #{@application.job_d}, my resume is here: #{cv_file}, please refer to
-      my resume when generating the contents.")
-  @video_message = response.content
-end
-
+  def generate_video_internal(prompt)
+    cv_file   = CvTextExtractor.call(@application)
+    chat      = RubyLLM.chat
+    chat.with_instructions(prompt)
+    response  = chat.ask("Help me generate the pitch with the job description here: #{@application.job_d}, my resume is here: #{cv_file}, please refer to
+        my resume when generating the contents.")
+    @video_message = response.content
+  end
 
   def application_params
     params.require(:application).permit(:job_d, :cv)
