@@ -22,6 +22,10 @@ class ApplicationsController < ApplicationController
     @application.user = current_user
 
     if @application.save
+      @application.update_columns(name: generate_name(@application))
+
+      @application.update_columns(title: generate_title(@application))
+
       redirect_to trait_application_path(@application), notice: "Application created!", status: :see_other
       @application.finals.create()
       @application.videos.create()
@@ -361,7 +365,42 @@ end
     end
   end
 
+
   private
+
+ def generate_name(application)
+    cv_file = CvTextExtractor.call(application)
+    prompt = <<~PROMPT
+    From the job description I give to you, I want you to extrat the company name that I'm applying to. RULES: The response
+    should only contain the name of the company, no talking or chatting, I want it to be very straight forward. No response
+    of confirming the creation, no message delivered to me, just the company name, plain texts.
+    PROMPT
+
+    chat = RubyLLM.chat
+    chat.with_instructions(prompt)
+    response = chat.ask("Help me generate the company name with the job description here: #{application.job_d}")
+    message = response.content
+    return message
+  end
+
+
+
+   def generate_title(application)
+    cv_file = CvTextExtractor.call(application)
+    prompt = <<~PROMPT
+    From the job description I give to you, I want you to extrat the role that I'm applying to. RULES: The response
+    should only contain the role, no talking or chatting, I want it to be very straight forward. Ex: Chef Backend Developer. No response
+    of confirming the creation, no message delivered to me, just the role title, plain texts.
+    PROMPT
+
+    chat = RubyLLM.chat
+    chat.with_instructions(prompt)
+    response = chat.ask("Help me generate the role title with the job description here: #{application.job_d}")
+    message = response.content
+    return message
+  end
+
+
 
   def generate_cl_internal(prompt)
     cv_file   = CvTextExtractor.call(@application)
