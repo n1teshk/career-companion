@@ -157,7 +157,11 @@ Output format:
   end
 
   def create_video
-    @video = @application.videos.build(video_params)
+    puts 'UPLOAD VIDEO'
+
+    @application = Application.find(params[:id])
+    @video = @application.videos.build
+    @video.file = params[:video]
     if @video.save
       redirect_to video_page_application_path(@application), notice: "Video was successfully created."
     else
