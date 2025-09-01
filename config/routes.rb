@@ -23,9 +23,10 @@ Rails.application.routes.draw do
     post :generate_video
     post :final_cl
     post :final_pitch
-
-    get :generating
-    get :status
+    
+    get :video_page
+    get  :new_video
+    post :create_video
   end
 
 
