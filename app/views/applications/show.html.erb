@@ -70,22 +70,40 @@
       </div>
 
         <!-- Final Video Pitch -->
-        <div class="d-flex flex-column" style="flex: 0 0 40%; min-width: 300px;">
-          <h2 class="h5 mb-4 text-center">Final Video Pitch</h2>
-        <div class="d-flex flex-column p-3 border rounded flex-grow-1" style="height: 450px;">
-          <div id="video_output" class="mb-3 p-2 overflow-auto" style="flex: 1 1 auto;">
-            <%= simple_format(@final_pitch || @application.finals.last.pitch || "No video pitch generated yet") %>
-          </div>
-          <div style="flex-shrink: 0;">
-            <button type="button" id="copy-pitch-btn" class="btn btn-primary w-100" onclick="copyVideoPitch()">
-              <span id="copy-pitch-text">Copy to Clipboard</span>
+  <div class="d-flex flex-column" style="flex: 0 0 40%; min-width: 300px;">
+  <h2 class="h5 mb-4 text-center">Final Video Pitch</h2>
+  <div class="d-flex flex-column p-3 border rounded flex-grow-1" style="height: 450px;">
+    <div id="video_output" class="mb-3 p-2 overflow-auto" style="flex: 1 1 auto;">
+      <%= simple_format(@final_pitch || @application.finals.last.pitch || "No video pitch generated yet") %>
+    </div>
+    <div style="flex-shrink: 0;">
+      <button type="button" id="copy-pitch-btn" class="btn btn-primary w-100" onclick="copyVideoPitch()">
+        <span id="copy-pitch-text">Copy to Clipboard</span>
+      </button>
+
+      <% if (video = @application.videos.last) && video.file.attached? %>
+        <% cloudinary_url = url_for(video.file) %>
+        <div class="mt-3">
+          <label class="form-label d-block">Cloudinary video link</label>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <input id="videoLink"
+                   type="text"
+                   readonly
+                   value="<%= cloudinary_url %>"
+                   class="form-control"
+                   style="flex:1;">
+            <button type="button"
+                    class="btn btn-outline-secondary"
+                    onclick="navigator.clipboard.writeText(document.getElementById('videoLink').value)">
+              Copy
             </button>
+            <%= link_to "Open", cloudinary_url, target: "_blank", rel: "noopener", class: "btn btn-primary" %>
           </div>
         </div>
-      </div>
-      </div>
+      <% end %>
     </div>
   </div>
+</div>
 
   <div class="d-flex justify-content-center my-5">
     <%= link_to "Back to Dashboard", applications_path, class: "btn btn-secondary px-4 py-2 me-3" %>
