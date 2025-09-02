@@ -4,145 +4,176 @@
 </h2>
 
 <div class="container-fluid">
-  <div class="d-flex justify-content-center">
-    <div class="d-flex flex-column" style="max-width: 1400px; width: 100%;">
-      <!-- Parent flexbox container for all three sections -->
-      <div class="d-flex gap-4 justify-content-center">
-        <!-- Your Selections -->
-        <div class="d-flex flex-column" style="flex: 0 0 20%; min-width: 200px;">
-          <h2 class="h5 mb-4 text-center">Your Selections</h2>
-          <div class="d-flex flex-column p-3 border rounded flex-grow-1" style="height: 450px;">
-            <div class="flex-grow-1 p-2 overflow-auto">
-            <div class="mb-3">
-              <h6 class="small text-muted mb-2">Tone</h6>
-              <p class="small mb-0"><%= session[:trait_choice1] || "Not selected" %></p>
+  <div class="d-flex justify-content-center" style="width: 1400px; margin: 0 auto;">
+    <div class="d-flex flex-column" style="width: 100%;">
+      <div class="d-flex justify-content-between align-items-center mb-4 p-4 rounded-4 shadow bg-white border">
+        <div class="pe-4">
+          <h1 class="h4 mb-2">
+            <strong class="text-secondary fw-normal">Role applied for:</strong>
+            <strong class="text-dark"><%= @application.title %></strong>
+          </h1>
+          <h2 class="h6 text-muted mb-0">
+            <strong class="fw-normal">Company:</strong>
+            <span class="text-secondary"><%= @application.name %></span>
+          </h2>
+        </div>
+        <div class="text-end text-muted small ps-4">
+          <div class="mb-1">
+            <strong>Created On:</strong> <%= @application.created_at.strftime("%b %d, %Y") %>
+          </div>
+          <div>
+            <strong>Last Updated:</strong> <%= @application.updated_at.strftime("%b %d, %Y") %>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex gap-4 align-items-start" style="width: 1400px;">
+        <div class="d-flex flex-column gap-4" style="flex: 0 0 20%;">
+          <div class="d-flex flex-column p-4 rounded-4 shadow bg-white border" style="min-width: 200px; height: 425px;">
+            <h2 class="h5 mb-4 text-center"><strong>Your Selections</strong></h2>
+            <div class="d-flex flex-column flex-grow-1">
+              <div class="flex-grow-1 p-2 overflow-auto">
+                <div class="mb-3">
+                  <h6 class="small text-muted mb-2">Tone</h6>
+                  <p class="small mb-0"><%= session[:trait_choice1] || "Not selected" %></p>
+                </div>
+                <hr class="my-3" style="border-color: #e0e0e0;">
+                <div class="mb-3">
+                  <h6 class="small text-muted mb-2">Professional Strength</h6>
+                  <p class="small mb-0">
+                    <% if session[:trait_choice2] == "Other" %>
+                      <%= session[:trait_choice2_other] || "Not selected" %>
+                    <% else %>
+                      <%= session[:trait_choice2] || "Not selected" %>
+                    <% end %>
+                  </p>
+                </div>
+                <hr class="my-3" style="border-color: #e0e0e0;">
+                <div class="mb-3">
+                  <h6 class="small text-muted mb-2">Highlight an accomplishment</h6>
+                  <p class="small mb-0">
+                    <% if session[:trait_choice3] == "Other" %>
+                      <%= session[:trait_choice3_other] || "Not selected" %>
+                    <% else %>
+                      <%= session[:trait_choice3] || "Not selected" %>
+                    <% end %>
+                  </p>
+                </div>
+                <hr class="my-3" style="border-color: #e0e0e0;">
+                <div class="mb-3">
+                  <h6 class="small text-muted mb-2">Video Pitch Personality</h6>
+                  <p class="small mb-0">
+                    <% if session[:trait_choice4] == "Other" %>
+                      <%= session[:trait_choice4_other] || "Not selected" %>
+                    <% else %>
+                      <%= session[:trait_choice4] || "Not selected" %>
+                    <% end %>
+                  </p>
+                </div>
+              </div>
             </div>
+          </div>
 
-            <hr class="my-3">
-
-            <div class="mb-3">
-              <h6 class="small text-muted mb-2">Professional Strength</h6>
-              <p class="small mb-0">
-                <% if session[:trait_choice2] == "Other" %>
-                  <%= session[:trait_choice2_other] || "Not specified" %>
+          <div class="d-flex flex-column p-4 rounded-4 shadow bg-white border" style="min-width: 200px; height: 135px;">
+            <h2 class="h5 mb-4 text-center"><strong>Documents</strong></h2>
+            <div class="d-flex flex-column flex-grow-1">
+              <div class="flex-grow-1 p-2">
+                <% if @application.cv.attached? %>
+                  <div class="d-flex align-items-center justify-content-between">
+                    <a href="<%= url_for(@application.cv) %>" target="_blank" class="align-items-center">
+                      <i class="bi bi-file-earmark-text me-2"></i>
+                      <%= @application.cv.filename %>
+                    </a>
+                    <a href="<%= url_for(@application.cv) %>" download="<%= @application.cv.filename %>" class="btn btn-sm" title="Download CV" style="color: #6c757d;">
+                    <i class="bi bi-download" style="font-size: 1.2rem;"></i>
+                    </a>
+                  </div>
                 <% else %>
-                  <%= session[:trait_choice2] || "Not selected" %>
+                  <p class="text-muted small">No CV uploaded.</p>
                 <% end %>
-              </p>
+              </div>
             </div>
+          </div>
+        </div>
 
-            <hr class="my-3">
-
-            <div class="mb-3">
-              <h6 class="small text-muted mb-2">Experience Level</h6>
-              <p class="small mb-0"><%= session[:trait_choice3] || "Not selected" %></p>
+        <div class="d-flex flex-column p-4 rounded-4 shadow bg-white border" style="flex: 0 0 38.25%; height: 585px;">
+          <div class="d-flex align-items-center mb-4">
+            <h2 class="h5 mb-0 text-center flex-grow-1"><strong>Final Cover Letter</strong></h2>
+            <a
+              class="btn btn-link p-1"
+              href="data:text/plain;charset=utf-8,<%= ERB::Util.url_encode(@application.finals.last.cl || '') %>"
+              download="cover_letter_<%= @application.title.parameterize.underscore %>.txt"
+              title="Download as .txt"
+              style="color: #6c757d;"
+            >
+              <i class="bi bi-download" style="font-size: 1.2rem;"></i>
+            </a>
+          </div>
+          <div class="d-flex flex-column flex-grow-1" style="min-height: 0;">
+            <div class="p-2 overflow-auto flex-grow-1">
+              <%= simple_format(@application.finals.last.cl) %>
             </div>
+          </div>
+        </div>
 
-            <hr class="my-3">
-
-            <div class="mb-3">
-              <h6 class="small text-muted mb-2">Career Motivation</h6>
-              <p class="small mb-0">
-                <% if session[:trait_choice4] == "Other" %>
-                  <%= session[:trait_choice4_other] || "Not specified" %>
+        <div class="d-flex flex-column p-4 rounded-4 shadow bg-white border" style="flex: 0 0 38.25%; height: 585px;">
+          <div class="d-flex align-items-center mb-4">
+            <h2 class="h5 mb-0 text-center flex-grow-1"><strong>Final Video Pitch</strong></h2>
+            <% if @video&.file&.attached? %>
+              <a
+                href="<%= url_for(@video.file) %>"
+                download="<%= @video.file.filename %>"
+                class="btn btn-link p-1"
+                title="Download Video"
+                style="color: #6c757d;"
+              >
+                <i class="bi bi-download" style="font-size: 1.2rem;"></i>
+              </a>
+            <% elsif @application.finals.last&.pitch.present? %>
+              <a
+                class="btn btn-link p-1"
+                href="data:text/plain;charset=utf-8,<%= ERB::Util.url_encode(@application.finals.last.pitch || '') %>"
+                download="video_pitch_<%= @application.title.parameterize.underscore %>.txt"
+                title="Download as .txt"
+                style="color: #6c757d;"
+              >
+                <i class="bi bi-download" style="font-size: 1.2rem;"></i>
+              </a>
+            <% end %>
+          </div>
+          <div class="d-flex flex-column flex-grow-1" style="min-height: 0;">
+            <div class="pt-4 px-2 d-flex justify-content-center align-items-start flex-grow-1 overflow-auto">
+              <% if @video&.file&.attached? %>
+                <video controls style="width: 100%; height: auto; max-height: 100%;">
+                  <source src="<%= url_for(@video.file) %>" type="<%= @video.file.content_type %>">
+                  Your browser does not support the video tag.
+                </video>
+              <% else %>
+                <% if @application.finals.last&.pitch.present? %>
+                  <div class="d-flex flex-wrap gap-3">
+                    <% @application.finals.last.pitch.split("\n\n").each do |paragraph| %>
+                      <% if paragraph.strip.present? %>
+                        <div class="flex-fill">
+                          <%= simple_format(paragraph) %>
+                        </div>
+                      <% end %>
+                    <% end %>
+                  </div>
                 <% else %>
-                  <%= session[:trait_choice4] || "Not selected" %>
+                  <div class="text-muted text-center">
+                    <i class="bi bi-camera-video" style="font-size: 3rem;"></i>
+                    <p class="mt-2">Video pitch will appear here when uploaded</p>
+                  </div>
                 <% end %>
-              </p>
+              <% end %>
             </div>
           </div>
         </div>
       </div>
 
-        <!-- Final Cover Letter -->
-        <div class="d-flex flex-column" style="flex: 0 0 40%; min-width: 300px;">
-          <h2 class="h5 mb-4 text-center">Final Cover Letter</h2>
-        <div class="d-flex flex-column p-3 border rounded flex-grow-1" style="height: 450px;">
-          <div id="cl_output" class="mb-3 p-2 overflow-auto" style="flex: 1 1 auto;">
-            <%= simple_format(@final_cl || @application.finals.last.cl || "No cover letter generated yet") %>
-          </div>
-          <div style="flex-shrink: 0;">
-            <button type="button" id="copy-cl-btn" class="btn btn-primary w-100" onclick="copyCoverLetter()">
-              <span id="copy-cl-text">Copy to Clipboard</span>
-            </button>
-          </div>
-        </div>
-      </div>
-
-        <!-- Final Video Pitch -->
-        <div class="d-flex flex-column" style="flex: 0 0 40%; min-width: 300px;">
-          <h2 class="h5 mb-4 text-center">Final Video Pitch</h2>
-        <div class="d-flex flex-column p-3 border rounded flex-grow-1" style="height: 450px;">
-          <div id="video_output" class="mb-3 p-2 overflow-auto" style="flex: 1 1 auto;">
-            <%= simple_format(@final_pitch || @application.finals.last.pitch || "No video pitch generated yet") %>
-          </div>
-          <div style="flex-shrink: 0;">
-            <button type="button" id="copy-pitch-btn" class="btn btn-primary w-100" onclick="copyVideoPitch()">
-              <span id="copy-pitch-text">Copy to Clipboard</span>
-            </button>
-          </div>
-        </div>
-      </div>
+      <div class="d-flex justify-content-center m-4 p-6">
+        <%= link_to "Go to Dashboard", applications_path, class: "btn btn-success btn-lg shadow-sm" %>
       </div>
     </div>
   </div>
-
-  <div class="d-flex justify-content-center my-5">
-    <%= link_to "Back to Dashboard", applications_path, class: "btn btn-secondary px-4 py-2 me-3" %>
-    <%= link_to "Create New Application", new_application_path, class: "btn btn-success px-4 py-2" %>
-  </div>
 </div>
-
-<script>
-  function copyCoverLetter() {
-    const clOutput = document.getElementById("cl_output");
-    const clText = clOutput.innerText;
-    const copyBtn = document.getElementById("copy-cl-btn");
-    const copyText = document.getElementById("copy-cl-text");
-
-    navigator.clipboard.writeText(clText).then(function() {
-      copyText.textContent = "Copied ✓";
-      copyBtn.classList.remove("btn-primary");
-      copyBtn.classList.add("btn-success");
-
-      setTimeout(function() {
-        copyText.textContent = "Copy to Clipboard";
-        copyBtn.classList.remove("btn-success");
-        copyBtn.classList.add("btn-primary");
-      }, 2000);
-    }).catch(function(err) {
-      console.error('Failed to copy: ', err);
-      copyText.textContent = "Copy failed";
-
-      setTimeout(function() {
-        copyText.textContent = "Copy to Clipboard";
-      }, 2000);
-    });
-  }
-
-  function copyVideoPitch() {
-    const pitchOutput = document.getElementById("video_output");
-    const pitchText = pitchOutput.innerText;
-    const copyBtn = document.getElementById("copy-pitch-btn");
-    const copyText = document.getElementById("copy-pitch-text");
-
-    navigator.clipboard.writeText(pitchText).then(function() {
-      copyText.textContent = "Copied ✓";
-      copyBtn.classList.remove("btn-primary");
-      copyBtn.classList.add("btn-success");
-
-      setTimeout(function() {
-        copyText.textContent = "Copy to Clipboard";
-        copyBtn.classList.remove("btn-success");
-        copyBtn.classList.add("btn-primary");
-      }, 2000);
-    }).catch(function(err) {
-      console.error('Failed to copy: ', err);
-      copyText.textContent = "Copy failed";
-
-      setTimeout(function() {
-        copyText.textContent = "Copy to Clipboard";
-      }, 2000);
-    });
-  }
-</script>
