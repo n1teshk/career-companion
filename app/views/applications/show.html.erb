@@ -3,11 +3,9 @@
   Your final cover letter and video pitch are ready to be used
 </h2>
 
-<div class="container-fluid" data-controller="copy-share">
-  <div class="mx-auto" style="max-width: 1400px;">
-    <div class="d-flex flex-column w-100">
-      
-      <!-- Application Header -->
+<div class="container-fluid">
+  <div class="d-flex justify-content-center" style="width: 1400px; margin: 0 auto;">
+    <div class="d-flex flex-column" style="width: 100%;">
       <div class="d-flex justify-content-between align-items-center mb-4 p-4 rounded-4 shadow bg-white border">
         <div class="pe-4">
           <h1 class="h4 mb-2">
@@ -29,14 +27,9 @@
         </div>
       </div>
 
-      <!-- Main Content -->
-      <div class="d-flex gap-4 align-items-start w-100">
-        
-        <!-- Sidebar - Your Selections & Documents (20% max-width) -->
-        <div class="d-flex flex-column gap-4" style="flex: 0 0 20%; max-width: 20%;">
-          
-          <!-- Your Selections -->
-          <div class="d-flex flex-column p-4 rounded-4 shadow bg-white border" style="height: 425px;">
+      <div class="d-flex gap-4 align-items-start" style="width: 1400px;">
+        <div class="d-flex flex-column gap-4" style="flex: 0 0 20%;">
+          <div class="d-flex flex-column p-4 rounded-4 shadow bg-white border" style="flex: 0 0 20%; max-width: 20%; min-width: 200px; height: 425px;">
             <h2 class="h5 mb-4 text-center"><strong>Your Selections</strong></h2>
             <div class="d-flex flex-column flex-grow-1">
               <div class="flex-grow-1 p-2 overflow-auto">
@@ -48,41 +41,52 @@
                 <div class="mb-3">
                   <h6 class="small text-muted mb-2">Professional Strength</h6>
                   <p class="small mb-0">
-                    <%= session[:trait_choice2] == "Other" ? (session[:trait_choice2_other] || "Not selected") : (session[:trait_choice2] || "Not selected") %>
+                    <% if session[:trait_choice2] == "Other" %>
+                      <%= session[:trait_choice2_other] || "Not selected" %>
+                    <% else %>
+                      <%= session[:trait_choice2] || "Not selected" %>
+                    <% end %>
                   </p>
                 </div>
                 <hr class="my-3" style="border-color: #e0e0e0;">
                 <div class="mb-3">
                   <h6 class="small text-muted mb-2">Highlight an accomplishment</h6>
                   <p class="small mb-0">
-                    <%= session[:trait_choice3] == "Other" ? (session[:trait_choice3_other] || "Not selected") : (session[:trait_choice3] || "Not selected") %>
+                    <% if session[:trait_choice3] == "Other" %>
+                      <%= session[:trait_choice3_other] || "Not selected" %>
+                    <% else %>
+                      <%= session[:trait_choice3] || "Not selected" %>
+                    <% end %>
                   </p>
                 </div>
                 <hr class="my-3" style="border-color: #e0e0e0;">
                 <div class="mb-3">
                   <h6 class="small text-muted mb-2">Video Pitch Personality</h6>
                   <p class="small mb-0">
-                    <%= session[:trait_choice4] == "Other" ? (session[:trait_choice4_other] || "Not selected") : (session[:trait_choice4] || "Not selected") %>
+                    <% if session[:trait_choice4] == "Other" %>
+                      <%= session[:trait_choice4_other] || "Not selected" %>
+                    <% else %>
+                      <%= session[:trait_choice4] || "Not selected" %>
+                    <% end %>
                   </p>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- Documents -->
-          <div class="d-flex flex-column p-4 rounded-4 shadow bg-white border" style="height: 150px;">
+          <div class="d-flex flex-column p-4 rounded-4 shadow bg-white border" style="flex: 0 0 20%; max-width: 20%; min-width: 200px; height: 150px;">
             <h2 class="h5 mb-4 text-center"><strong>Documents</strong></h2>
             <div class="d-flex flex-column flex-grow-1">
               <div class="flex-grow-1 p-2">
                 <% if @application.cv.attached? %>
                   <div class="d-flex align-items-center justify-content-between">
-                    <a href="<%= url_for(@application.cv) %>" target="_blank" class="d-flex align-items-center text-decoration-none" style="min-width: 0;">
+                    <a href="<%= url_for(@application.cv) %>" target="_blank" class="align-items-center">
                       <i class="bi bi-file-earmark-text me-2"></i>
-                      <span class="text-truncate">
+                      <span class="text-truncate" style="max-width: 140px;">
                         <%= @application.cv.filename %>
                       </span>
                     </a>
-                    <a href="<%= url_for(@application.cv) %>" download="<%= @application.cv.filename %>" class="btn btn-sm ms-2" title="Download CV" style="color: #6c757d; border: none; background: none;">
+                    <a href="<%= url_for(@application.cv) %>" download="<%= @application.cv.filename %>" class="btn btn-sm" title="Download CV" style="color: #6c757d; border: none; background: none;">
                       <i class="bi bi-download"></i>
                     </a>
                   </div>
@@ -94,16 +98,14 @@
           </div>
         </div>
 
-        <!-- Final Cover Letter (38.25%) -->
-        <div class="d-flex flex-column p-4 rounded-4 shadow bg-white border" style="flex: 0 0 38.25%; height: 600px;">
+        <div class="d-flex flex-column p-4 rounded-4 shadow bg-white border" style="flex: 0 0 38.25%; max-width: 38.25%%; height: 600px;">
           <div class="d-flex align-items-center mb-4">
             <h2 class="h5 mb-0 text-center flex-grow-1"><strong>Final Cover Letter</strong></h2>
             <div class="d-flex gap-2 align-items-center">
               <button
                 type="button"
                 class="btn btn-sm"
-                data-action="click->copy-share#copyContent"
-                data-copy-share-content-id-param="coverLetterContent"
+                onclick="navigator.clipboard.writeText(document.getElementById('coverLetterContent').innerText); this.innerHTML = '<i class=\'bi bi-check\'></i>'; setTimeout(() => { this.innerHTML = '<i class=\'bi bi-copy\'></i>' }, 2000);"
                 title="Copy to clipboard"
                 style="color: #6c757d; border: none; background: none;"
               >
@@ -124,55 +126,42 @@
             <div id="coverLetterContent" class="p-2 overflow-auto flex-grow-1">
               <%= simple_format(@application.finals.last.cl) %>
               <% if (video = @application.videos.last) && video.file.attached? %>
-                <p>Please <a href="<%= url_for(video.file) %>" target="_blank" rel="noopener">click here</a> to see the video.</p>
+                <% cloudinary_url = url_for(video.file) %>
+                <p>Please <a href="<%= cloudinary_url %>" target="_blank" rel="noopener">click here</a> to see the video.</p>
               <% end %>
             </div>
           </div>
         </div>
 
-        <!-- Final Video Pitch (38.25%) -->
-        <div class="d-flex flex-column p-4 rounded-4 shadow bg-white border" style="flex: 0 0 38.25%; height: 600px;">
+        <div class="d-flex flex-column p-4 rounded-4 shadow bg-white border" style="flex: 0 0 38.25%; max-width: 38.25%%; height: 600px;">
           <div class="d-flex align-items-center mb-4">
             <h2 class="h5 mb-0 text-center flex-grow-1"><strong>Final Video Pitch</strong></h2>
-            <% if (video = @application.videos.last) && video.file.attached? %>
+.            <% if @video&.file&.attached? %>
+              <a
+                href="<%= url_for(@video.file) %>"
+                download="<%= @video.file.filename %>"
+                class="btn btn-link p-1"
+                title="Download Video"
+                style="color: #6c757d;"
+              >
+                <i class="bi bi-download" style="font-size: 1.2rem;"></i>
+              </a>
+            <% elsif @application.finals.last&.pitch.present? %>
               <div class="d-flex gap-2 align-items-center">
                 <button
                   type="button"
                   class="btn btn-sm"
-                  data-action="click->copy-share#shareLink"
-                  data-copy-share-url-param="<%= url_for(video.file) %>"
-                  title="Share video link"
+                  onclick="navigator.clipboard.writeText(document.getElementById('videoPitchContent').innerText); this.innerHTML = '<i class=\'bi bi-check\'></i>'; setTimeout(() => { this.innerHTML = '<i class=\'bi bi-copy\'></i>' }, 2000);"
+                  title="Copy to clipboard"
                   style="color: #6c757d; border: none; background: none;"
                 >
-                  <i class="bi bi-share"></i>
+                  <i class="bi bi-copy"></i>
                 </button>
                 <a
-                  href="<%= url_for(video.file) %>"
-                  download="<%= video.file.filename %>"
                   class="btn btn-sm"
-                  title="Download Video"
-                  style="color: #6c757d; border: none; background: none;"
-                >
-                  <i class="bi bi-download"></i>
-                </a>
-              </div>
-            <% elsif @video&.file&.attached? %>
-              <div class="d-flex gap-2 align-items-center">
-                <button
-                  type="button"
-                  class="btn btn-sm"
-                  data-action="click->copy-share#shareLink"
-                  data-copy-share-url-param="<%= url_for(@video.file) %>"
-                  title="Share video link"
-                  style="color: #6c757d; border: none; background: none;"
-                >
-                  <i class="bi bi-share"></i>
-                </button>
-                <a
-                  href="<%= url_for(@video.file) %>"
-                  download="<%= @video.file.filename %>"
-                  class="btn btn-sm"
-                  title="Download Video"
+                  href="data:text/plain;charset=utf-8,<%= ERB::Util.url_encode(@application.finals.last.pitch || '') %>"
+                  download="video_pitch_<%= @application.title.parameterize.underscore %>.txt"
+                  title="Download as .txt"
                   style="color: #6c757d; border: none; background: none;"
                 >
                   <i class="bi bi-download"></i>
@@ -182,12 +171,7 @@
           </div>
           <div class="d-flex flex-column flex-grow-1" style="min-height: 0;">
             <div class="pt-4 px-2 d-flex justify-content-center align-items-start flex-grow-1 overflow-auto">
-              <% if (video = @application.videos.last) && video.file.attached? %>
-                <video controls style="width: 100%; height: auto; max-height: 100%;">
-                  <source src="<%= url_for(video.file) %>" type="<%= video.file.content_type %>">
-                  Your browser does not support the video tag.
-                </video>
-              <% elsif @video&.file&.attached? %>
+              <% if @video&.file&.attached? %>
                 <video controls style="width: 100%; height: auto; max-height: 100%;">
                   <source src="<%= url_for(@video.file) %>" type="<%= @video.file.content_type %>">
                   Your browser does not support the video tag.
@@ -215,39 +199,10 @@
         </div>
       </div>
 
-      <!-- Cloudinary Video Link Section -->
-      <% if (video = @application.videos.last) && video.file.attached? %>
-        <% cloudinary_url = url_for(video.file) %>
-        <div class="mt-3 p-4 rounded-4 shadow bg-white border">
-          <label class="form-label d-block">Cloudinary video link</label>
-          <div class="d-flex gap-2 align-items-center">
-            <input 
-              id="videoLink"
-              type="text"
-              readonly
-              value="<%= cloudinary_url %>"
-              class="form-control flex-grow-1"
-            />
-            <button 
-              type="button"
-              class="btn btn-outline-secondary"
-              data-action="click->copy-share#copyContent"
-              data-copy-share-content-id-param="videoLink"
-            >
-              Copy
-            </button>
-            <%= link_to "Open", cloudinary_url, target: "_blank", rel: "noopener", class: "btn btn-primary" %>
-          </div>
-        </div>
-      <% end %>
 
-      <!-- Action Buttons -->
-      <div class="d-flex justify-content-center gap-3 mt-4 mb-4">
-        <%= link_to "Back to Dashboard", applications_path, class: "btn btn-secondary px-4 py-2" %>
-        <%= link_to "Create New Application", new_application_path, class: "btn btn-success px-4 py-2" %>
-        <% if defined?(@application) && @application.persisted? %>
-          <%= link_to "Record a video", video_page_application_path(@application), class: "btn btn-primary px-4 py-2" %>
-        <% end %>
+      <div class="d-flex justify-content-center gap-2 m-4 p-6">
+        <%= link_to "Go to Dashboard", applications_path, class: "btn btn-success px-4 py-2" %>
+        <%= link_to "Create New Application", new_application_path, class: "btn btn-primary px-4 py-2" %>
       </div>
     </div>
   </div>
