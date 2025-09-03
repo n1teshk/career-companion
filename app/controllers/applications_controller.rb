@@ -22,9 +22,6 @@ class ApplicationsController < ApplicationController
     @application.user = current_user
 
     if @application.save
-      @application.update_columns(name: generate_name(@application))
-
-      @application.update_columns(title: generate_title(@application))
 
       redirect_to trait_application_path(@application), notice: "Application created!", status: :see_other
       @application.finals.create()
@@ -165,6 +162,8 @@ PROMPT
   # enqueue
   CreateClJob.perform_later(@application.id, @llm_prompt_cl)
   CreatePitchJob.perform_later(@application.id, @llm_prompt_video)
+  @application.update_columns(name: generate_name(@application))
+  @application.update_columns(title: generate_title(@application))
 
   # go to loading page
   redirect_to generating_application_path(@application)
