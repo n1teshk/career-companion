@@ -33,10 +33,21 @@ export default class extends Controller {
   updateFilePreview() {
     const file = this.fileInputTarget.files[0]
     if (file) {
-      this.filePreviewTarget.textContent = `📄 ${file.name} (${(file.size / 1024).toFixed(1)} KB)`
+      const fileName = this.truncateFileName(file.name, 25)
+      this.filePreviewTarget.textContent = `📄 ${fileName} (${(file.size / 1024).toFixed(1)} KB)`
     } else {
       this.filePreviewTarget.textContent = "Drag and drop your CV here or click to browse"
     }
+  }
+
+  truncateFileName(fileName, maxLength) {
+    if (fileName.length <= maxLength) return fileName
+    
+    const extension = fileName.substring(fileName.lastIndexOf('.'))
+    const nameWithoutExt = fileName.substring(0, fileName.lastIndexOf('.'))
+    const truncatedName = nameWithoutExt.substring(0, maxLength - extension.length - 3)
+    
+    return `${truncatedName}...${extension}`
   }
 
   updateUploadIcon() {

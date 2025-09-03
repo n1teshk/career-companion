@@ -8,7 +8,7 @@
     <div class="d-flex flex-column" style="max-width: 1400px; width: 100%;">
 
       <div class="d-flex gap-4 justify-content-center align-items-start">
-        <div class="d-flex flex-column gap-4" style="flex: 0 0 20%; min-width: 200px;">
+        <div class="d-flex flex-column gap-4" style="flex: 0 0 20%; max-width: 20%; min-width: 200px;">
           <div class="d-flex flex-column p-4 rounded-4 shadow bg-white border" style="height: 500px;">
             <h2 class="h5 mb-4 text-center"><strong>Your Selections</strong></h2>
             <div class="d-flex flex-column flex-grow-1">
@@ -49,7 +49,7 @@
           </div>
         </div>
 
-        <div class="d-flex flex-column p-4 rounded-4 shadow bg-white border" style="flex: 0 0 38.25%; height: 500px;">
+        <div class="d-flex flex-column p-4 rounded-4 shadow bg-white border" style="flex: 0 0 38.25%; max-width: 38.25%; height: 500px;">
           <h2 class="h5 mb-4 text-center"><strong>Review your Cover Letter</strong></h2>
           <div class="d-flex flex-column" style="flex: 1; min-height: 0;">
             <div
@@ -75,7 +75,7 @@
           </div>
         </div>
 
-        <div class="d-flex flex-column p-4 rounded-4 shadow bg-white border" style="flex: 0 0 38.25%; height: 500px;">
+        <div class="d-flex flex-column p-4 rounded-4 shadow bg-white border" style="flex: 0 0 38.25%; max-width: 38.25%; height: 500px;">
           <h2 class="h5 mb-4 text-center"><strong>Review your Video Pitch</strong></h2>
           <div class="d-flex flex-column" style="flex: 1; min-height: 0;">
             <div
@@ -104,9 +104,9 @@
     </div>
   </div>
 
-  <div class="d-flex justify-content-center my-5">
-    <%= link_to "Go to Final Application Page →", application_path(@application),
-      class: "btn btn-primary px-4 py-2 disabled",
+  <div class="d-flex justify-content-center mt-4">
+    <%= link_to "Record Your Video →", video_page_application_path(@application),
+      class: "next-button disabled-state",
       data: { overview_target: "finalButton", action: "click->overview#checkFinalized" } %>
   </div>
 </div>
