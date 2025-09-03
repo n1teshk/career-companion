@@ -1,22 +1,65 @@
 <div data-controller="video" data-video-application-id-value="<%= params[:id] %>">
+  <div class="container my-5 d-flex justify-content-center">
+    <div class="flex-column" style="max-width: 600px; width: 100%;">
 
-  <h2>Record Your Video</h2>
+      <div class="p-4 border rounded shadow-sm mb-4 bg-dark text-white">
+        <h2 class="h5 mb-2 text-center">Teleprompter</h2>
+        <div id="teleprompter-text" style="overflow:hidden; height:150px; font-size:1.2rem; line-height:1.5;">
+          <%= simple_format(@application.cl_message) %>
+        </div>
+        <div class="d-flex justify-content-center gap-2 mt-2">
+          <button id="start-scroll" class="btn btn-outline-light flex-grow-1">Start Scrolling</button>
+          <button id="pause-scroll" class="btn btn-outline-secondary flex-grow-1">Pause</button>
+        </div>
+      </div>
 
-  <button type="button" id="start">Start</button>
-  <button type="button" id="stop">Stop and upload</button>
+      <div class="p-4 border rounded shadow-sm mb-4 bg-white">
+        <h2 class="h5 mb-3 text-center">Record Your Video!</h2>
 
-  <div>
-    <video id="live" width="300" height="200" autoplay muted style="border:1px solid black;"></video>
+        <div class="d-flex justify-content-center gap-2 mb-3">
+          <button type="button" id="start" class="btn btn-outline-primary flex-grow-1">Start</button>
+          <button type="button" id="stop" class="btn btn-outline-danger flex-grow-1">Stop</button>
+        </div>
+
+        <div>
+          <video id="live" width="600" height="200" autoplay muted style="border:1px solid black; border-radius:6px;"></video>
+        </div>
+      </div>
+
+      <div class="p-4 border rounded shadow-sm bg-white">
+        <h2 class="h5 mb-3 text-center">Finished Video</h2>
+        <% if @video&.file&.attached? %>
+          <video width="400" height="300" controls style="border-radius:6px;">
+            <source src="<%= url_for(@video.file) %>" type="<%= @video.file.content_type %>">
+            Your browser does not support the video tag.
+          </video>
+        <% else %>
+          <p class="text-center text-muted">No video recorded yet.</p>
+        <% end %>
+      </div>
+
+    </div>
   </div>
-
-  <h2>Uploaded Video</h2>
-  <% if @video&.file&.attached? %>
-    <video width="400" height="300" controls>
-      <source src="<%= url_for(@video.file) %>" type="<%= @video.file.content_type %>">
-      Your browser does not support the video tag.
-    </video>
-  <% else %>
-    <p>No video uploaded yet.</p>
-  <% end %>
-
 </div>
+
+<script>
+  let scrollInterval;
+  const teleprompter = document.getElementById('teleprompter-text');
+  const scrollSpeed = 1;
+  const intervalTime = 30;
+
+  document.getElementById('start-scroll').addEventListener('click', () => {
+    if (scrollInterval) clearInterval(scrollInterval);
+    scrollInterval = setInterval(() => { teleprompter.scrollTop += scrollSpeed; }, intervalTime);
+  });
+
+  document.getElementById('pause-scroll').addEventListener('click', () => {
+    clearInterval(scrollInterval);
+  });
+</script>
+
+<style>
+  .shadow-sm { box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075) !important; }
+  button#start, button#stop { font-weight: 500; padding: 0.5rem 1rem; }
+  video { max-width: 100%; height: auto; }
+</style>

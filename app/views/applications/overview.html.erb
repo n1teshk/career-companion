@@ -1,4 +1,3 @@
-
 <div class="custom-modal-overlay d-none" id="customAlertModal">
   <div class="custom-modal-content">
     <p id="customAlertMessage"></p>
@@ -11,12 +10,9 @@
   Please review the draft cover letter and video pitch. Regenerate to get more options
 </h2>
 
-<!-- Strong defensive styles to prevent overflow from unbroken tokens, tables, code, images, etc. -->
 <style>
-  /* Make sure flex items can shrink */
   .d-flex, .d-flex * { min-width: 0 !important; box-sizing: border-box !important; }
 
-  /* Preview boxes: force wrapping, hyphenation, and capped widths */
   #cl_output, #video_output {
     max-width: 100% !important;
     overflow: auto !important;
@@ -28,55 +24,19 @@
     hyphens: auto !important;
   }
 
-  /* Ensure all children comply */
-  #cl_output *, #video_output * {
-    max-width: 100% !important;
-    box-sizing: border-box !important;
-    white-space: pre-wrap !important;
-    overflow-wrap: anywhere !important;
-    word-break: break-all !important;
-  }
-
-  /* Tables must not force overflow */
-  #cl_output table, #video_output table {
-    table-layout: fixed !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    word-break: break-word !important;
-  }
-  #cl_output td, #cl_output th, #video_output td, #video_output th {
-    overflow-wrap: anywhere !important;
-    word-break: break-all !important;
-  }
-
-  /* Code / pre blocks: allow wrapping */
-  #cl_output pre, #video_output pre,
-  #cl_output code, #video_output code {
-    white-space: pre-wrap !important;
-    word-break: break-all !important;
-    overflow-wrap: anywhere !important;
-    max-width: 100% !important;
-  }
-
-  /* Images / iframes / svg */
-  #cl_output img, #video_output img,
-  #cl_output iframe, #video_output iframe,
-  #cl_output svg, #video_output svg {
-    max-width: 100% !important;
-    height: auto !important;
-  }
-
-  /* Anchor texts */
-  #cl_output a, #video_output a {
-    word-break: break-all !important;
-    overflow-wrap: anywhere !important;
-  }
+  #cl_output *, #video_output * { max-width: 100% !important; box-sizing: border-box !important; white-space: pre-wrap !important; overflow-wrap: anywhere !important; word-break: break-all !important; }
+  #cl_output table, #video_output table { table-layout: fixed !important; width: 100% !important; max-width: 100% !important; word-break: break-word !important; }
+  #cl_output td, #cl_output th, #video_output td, #video_output th { overflow-wrap: anywhere !important; word-break: break-all !important; }
+  #cl_output pre, #video_output pre, #cl_output code, #video_output code { white-space: pre-wrap !important; word-break: break-all !important; overflow-wrap: anywhere !important; max-width: 100% !important; }
+  #cl_output img, #video_output img, #cl_output iframe, #video_output iframe, #cl_output svg, #video_output svg { max-width: 100% !important; height: auto !important; }
+  #cl_output a, #video_output a { word-break: break-all !important; overflow-wrap: anywhere !important; }
 </style>
 
 <div class="container-fluid">
   <div class="d-flex justify-content-center">
     <div class="d-flex flex-column" style="max-width: 1400px; width: 100%;">
       <div class="d-flex gap-4 justify-content-center">
+        <!-- Selections Column -->
         <div class="d-flex flex-column" style="flex: 0 0 20%; min-width: 200px;">
           <h2 class="h5 mb-4 text-center">Your Selections</h2>
           <div class="d-flex flex-column p-3 border rounded flex-grow-1" style="height: 450px; min-width: 0;">
@@ -85,9 +45,7 @@
                 <h6 class="small text-muted mb-2">Tone</h6>
                 <p class="small mb-0"><%= session[:trait_choice1] || "Not selected" %></p>
               </div>
-
               <hr class="my-3">
-
               <div class="mb-3">
                 <h6 class="small text-muted mb-2">Professional Strength</h6>
                 <p class="small mb-0">
@@ -98,16 +56,12 @@
                   <% end %>
                 </p>
               </div>
-
               <hr class="my-3">
-
               <div class="mb-3">
                 <h6 class="small text-muted mb-2">Experience Level</h6>
                 <p class="small mb-0"><%= session[:trait_choice3] || "Not selected" %></p>
               </div>
-
               <hr class="my-3">
-
               <div class="mb-3">
                 <h6 class="small text-muted mb-2">Career Motivation</h6>
                 <p class="small mb-0">
@@ -122,6 +76,7 @@
           </div>
         </div>
 
+        <!-- Cover Letter Column -->
         <div class="d-flex flex-column" style="flex: 0 0 40%; min-width: 300px;">
           <h2 class="h5 mb-4 text-center">Review your Cover Letter</h2>
           <div class="d-flex flex-column p-3 border rounded" style="height: 450px; min-width: 0;">
@@ -148,6 +103,7 @@
           </div>
         </div>
 
+        <!-- Video Pitch Column -->
         <div class="d-flex flex-column" style="flex: 0 0 40%; min-width: 300px;">
           <h2 class="h5 mb-4 text-center">Review your Video Pitch</h2>
           <div class="d-flex flex-column p-3 border rounded" style="height: 450px; min-width: 0;">
@@ -159,12 +115,16 @@
               <%= simple_format(@application.video_message) %>
             </div>
             <div class="row g-2 mt-auto" style="flex-shrink: 0;">
-              <div class="col-6">
+              <div class="col-4">
                 <%= button_to "Regenerate", generate_video_application_path(@application, prompt_video: @llm_prompt_video),
                                 method: :post,
                                 class: "btn btn-outline-secondary w-100" %>
               </div>
-              <div class="col-6">
+              <div class="col-4">
+                <%= link_to "Record Video", video_page_application_path(@application),
+                            class: "btn btn-outline-primary w-100" %>
+              </div>
+              <div class="col-4">
                 <%= form_with url: final_pitch_application_path(@application), method: :post, id: "final-pitch-form", class: "w-100" do |form| %>
                   <%= form.hidden_field :final_pitch, id: "final_pitch_input" %>
                   <%= form.submit "Finalize", class: "btn btn-primary w-100" %>
@@ -173,6 +133,7 @@
             </div>
           </div>
         </div>
+
       </div>
     </div>
   </div>
@@ -186,13 +147,8 @@
 </div>
 
 <script>
-  // ---- Global app state (single source of truth) ----
-  window.appState = window.appState || {
-    clFinalized: false,
-    pitchFinalized: false
-  };
+  window.appState = window.appState || { clFinalized: false, pitchFinalized: false };
 
-  // ---- Modal helpers ----
   function showCustomAlert(message) {
     const el = document.getElementById("customAlertMessage");
     if (el) el.innerText = message;
@@ -205,19 +161,16 @@
     if (modal) modal.classList.add("d-none");
   }
 
-  // ---- Final-button / link state update ----
   function updateFinalButton() {
     const finalBtn = document.getElementById("final-application-btn");
     if (!finalBtn) return;
 
     const enabled = !!(window.appState.clFinalized && window.appState.pitchFinalized);
 
-    // visual classes
     finalBtn.classList.toggle("disabled", !enabled);
     finalBtn.classList.toggle("btn-success", enabled);
     finalBtn.classList.toggle("btn-primary", !enabled);
 
-    // actual disabled attribute — if you're using link_to, toggle pointer events instead
     if (enabled) {
       finalBtn.removeAttribute("aria-disabled");
       finalBtn.dataset.disabled = "false";
@@ -225,11 +178,10 @@
     } else {
       finalBtn.setAttribute("aria-disabled", "true");
       finalBtn.dataset.disabled = "true";
-      finalBtn.style.pointerEvents = "auto"; // keep clickable so onclick can show the modal
+      finalBtn.style.pointerEvents = "auto";
     }
   }
 
-  // Called by the "Go to Final Application Page" link; keep returning boolean for onClick handler
   function checkIfBothFinalized(event) {
     if (!(window.appState.clFinalized && window.appState.pitchFinalized)) {
       event && event.preventDefault();
@@ -239,7 +191,6 @@
     return true;
   }
 
-  // ---- Text-wrapping helpers (keeps your <wbr> insertion behavior) ----
   function breakLongTextNodes(container, chunkSize = 30) {
     if (!container) return;
     const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT, null, false);
@@ -270,22 +221,13 @@
     const containers = ['cl_output', 'video_output'].map(id => document.getElementById(id)).filter(Boolean);
 
     containers.forEach(container => {
-      try {
-        breakLongTextNodes(container, 30);
-      } catch (e) {
-        console.warn('initial breakLongTextNodes failed', e);
-      }
+      try { breakLongTextNodes(container, 30); } catch (e) { console.warn('initial breakLongTextNodes failed', e); }
 
       const mo = new MutationObserver(() => {
-        // debounce
         if (mo._scheduled) return;
         mo._scheduled = true;
         setTimeout(() => {
-          try {
-            breakLongTextNodes(container, 30);
-          } catch (e) {
-            console.warn('mutation breakLongTextNodes failed', e);
-          }
+          try { breakLongTextNodes(container, 30); } catch (e) { console.warn('mutation breakLongTextNodes failed', e); }
           mo._scheduled = false;
         }, 50);
       });
@@ -294,38 +236,28 @@
     });
   }
 
-  // ---- Attach handlers safely after DOM is ready ----
   document.addEventListener('DOMContentLoaded', function () {
-    // apply wrappers
     try { applyWrappersAndObservers(); } catch (e) { console.error(e); }
 
-    // wire finalize forms safely (only if present)
     const finalClForm = document.getElementById("final-cl-form");
     if (finalClForm) {
       finalClForm.addEventListener("submit", (event) => {
-        // populate hidden input
         const clOutput = document.getElementById("cl_output");
         const clHidden = document.getElementById("final_cl_input");
         if (clHidden && clOutput) clHidden.value = clOutput.innerText || clOutput.textContent || "";
 
-        // Allow form to submit but update UI immediately
         const submitBtn = event.target.querySelector('input[type="submit"], button[type="submit"]');
         if (submitBtn) {
-          // Update UI after a short delay to allow form submission
           setTimeout(() => {
             submitBtn.disabled = true;
-            // support both <input> and <button>
             if (submitBtn.tagName === 'INPUT') submitBtn.value = "Finalized ✓";
             else submitBtn.textContent = "Finalized ✓";
             submitBtn.classList.remove("btn-primary");
             submitBtn.classList.add("btn-success");
-
-            // update shared state
             window.appState.clFinalized = true;
             updateFinalButton();
           }, 100);
         }
-        // Don't prevent default - let the form submit
       });
     }
 
@@ -338,37 +270,27 @@
 
         const submitBtn = event.target.querySelector('input[type="submit"], button[type="submit"]');
         if (submitBtn) {
-          // Update UI after a short delay to allow form submission
           setTimeout(() => {
             submitBtn.disabled = true;
             if (submitBtn.tagName === 'INPUT') submitBtn.value = "Finalized ✓";
             else submitBtn.textContent = "Finalized ✓";
             submitBtn.classList.remove("btn-primary");
             submitBtn.classList.add("btn-success");
-
             window.appState.pitchFinalized = true;
             updateFinalButton();
           }, 100);
         }
-        // Don't prevent default - let the form submit
       });
     }
 
-    // ensure the UI reflects initial state on load
     updateFinalButton();
 
-    // close modal button fallback (if user clicks OK)
-    // note: your inline onclick on the modal button will still work; this is extra safety
     const modalOk = document.querySelector('#customAlertModal button');
     if (modalOk) modalOk.addEventListener('click', closeCustomAlert);
   });
 
-  // expose functions for inline onclick in erb link
   window.checkIfBothFinalized = checkIfBothFinalized;
   window.updateFinalButton = updateFinalButton;
   window.showCustomAlert = showCustomAlert;
   window.closeCustomAlert = closeCustomAlert;
 </script>
-
-
-<%= link_to 'record video', video_page_application_path(@application) %>
