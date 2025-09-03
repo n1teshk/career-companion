@@ -12,6 +12,7 @@ class ApplicationsController < ApplicationController
   def show
     @application = Application.find(params[:id])
     @final = @application.finals.last
+    @trait = @application.traits.last
 
     @final_cl = @final.cl
     @final_pitch = @final.pitch
@@ -26,6 +27,7 @@ class ApplicationsController < ApplicationController
       redirect_to trait_application_path(@application), notice: "Application created!", status: :see_other
       @application.finals.create()
       @application.videos.create()
+      @application.traits.create()
     else
       render :new, status: :unprocessable_entity
     end
@@ -44,14 +46,15 @@ end
 
   def trait
     @application = Application.find(params[:id])
+    @trait = @application.traits.last
     return unless request.patch?
 
-    session[:trait_choice1] = params[:trait_choice1]
-    session[:trait_choice2] = (params[:trait_choice2] == "Other" ? params[:trait_choice2_other] : params[:trait_choice2])
-    session[:trait_choice3] = params[:trait_choice3]
-    session[:trait_choice4] = (params[:trait_choice4] == "Other" ? params[:trait_choice4_other] : params[:trait_choice4])
+    @trait.update_columns(first: params[:trait_choice1])
+    @trait.update_columns(second: (params[:trait_choice2] == "Other" ? params[:trait_choice2_other] : params[:trait_choice2]))
+    @trait.update_columns(third: params[:trait_choice3])
+    @trait.update_columns(fourth: (params[:trait_choice4] == "Other" ? params[:trait_choice4_other] : params[:trait_choice4]))
 
-    @traits = [session[:trait_choice1], session[:trait_choice2], session[:trait_choice3], session[:trait_choice4]]
+    # @traits = [session[:trait_choice1], session[:trait_choice2], session[:trait_choice3], session[:trait_choice4]]
 
 
 
@@ -69,10 +72,10 @@ end
 
 
     Applicant profile
-    Cover Letter Tone: #{@traits[0]}
-    Main Professional Strength: #{@traits[1]}
-    Experience Level: #{@traits[2]}
-    Career Motivation: #{@traits[3]}
+    Cover Letter Tone: #{@trait.first}
+    Main Professional Strength: #{@trait.second}
+    Experience Level: #{@trait.third}
+    Career Motivation: #{@trait.fourth}
 
     STRUCTURE TO FOLLOW
   1) Greeting line: "Dear <recipient or Hiring Team>,"
@@ -117,10 +120,10 @@ You are an AI career coach. Based on my applicant profile below, generate a firs
 video pitch script I can record. The pitch must run 60–90 seconds total.
 
 Applicant profile:
-- Video Tone: #{@traits[0]}
-- Main Professional Strength (PRIMARY FOCUS): #{@traits[1]}
-- Experience Level: #{@traits[2]}
-- Career Motivation (PRIMARY FOCUS): #{@traits[3]}
+- Video Tone: #{@trait.first}
+- Main Professional Strength (PRIMARY FOCUS): #{@trait.second}
+- Experience Level: #{@trait.third}
+- Career Motivation (PRIMARY FOCUS): #{@trait.fourth}
 
 Priority & content rules:
 - Allocate ~65% of the script to the two PRIMARY FOCUS items (strength + motivation).
@@ -137,14 +140,14 @@ Non-fabrication rules (strict):
 
 Constraints:
 - 135–200 words (aim ~165) to fit 60–90 seconds at natural speaking pace.
-- Conversational, confident, and #{ @traits[0] } in tone. Write in first person (“I…”).
+- Conversational, confident, and #{ @trait.first} in tone. Write in first person (“I…”).
 - Short, speakable sentences. Light stage directions in [brackets] only where helpful.
 
 Structure (with loose timestamps):
-- 0:00 Hook (1–2 lines): Introduction by name, quick human opener that hints at my #{@traits[3]}.
-- 0:10 Strength + proof (2–4 lines): spotlight #{@traits[1]} with ONE concrete example and outcome.
-- 0:35 Motivation & fit (2–3 lines): connect #{@traits[3]} to the value I’d create in the role/team.
-- 0:55 Experience frame (1–2 lines): position my #{@traits[2]} level succinctly (no list).
+- 0:00 Hook (1–2 lines): Introduction by name, quick human opener that hints at my #{@trait.fourth}.
+- 0:10 Strength + proof (2–4 lines): spotlight #{@trait.second} with ONE concrete example and outcome.
+- 0:35 Motivation & fit (2–3 lines): connect #{@trait.fourth} to the value I’d create in the role/team.
+- 0:55 Experience frame (1–2 lines): position my #{@trait.third} level succinctly (no list).
 - 1:10 Call-to-action (1–2 lines): invite next step; warm, concise close.
 
 Output format:
@@ -176,8 +179,9 @@ end
 
 
   def overview
-    @traits = [session[:trait_choice1], session[:trait_choice2], session[:trait_choice3], session[:trait_choice4]]
+    # @traits = [session[:trait_choice1], session[:trait_choice2], session[:trait_choice3], session[:trait_choice4]]
     @application = Application.find(params[:id])
+    @trait = @application.traits.last
 
     @llm_prompt_cl = <<~PROMPT
     ROLE
@@ -193,10 +197,10 @@ end
 
 
     Applicant profile
-    Cover Letter Tone: #{@traits[0]}
-    Main Professional Strength: #{@traits[1]}
-    Experience Level: #{@traits[2]}
-    Career Motivation: #{@traits[3]}
+    Cover Letter Tone: #{@trait.first}
+    Main Professional Strength: #{@trait.second}
+    Experience Level: #{@trait.third}
+    Career Motivation: #{@trait.fourth}
 
     STRUCTURE TO FOLLOW
   1) Greeting line: "Dear <recipient or Hiring Team>,"
@@ -241,10 +245,10 @@ You are an AI career coach. Based on my applicant profile below, generate a firs
 video pitch script I can record. The pitch must run 60–90 seconds total.
 
 Applicant profile:
-- Video Tone: #{@traits[0]}
-- Main Professional Strength (PRIMARY FOCUS): #{@traits[1]}
-- Experience Level: #{@traits[2]}
-- Career Motivation (PRIMARY FOCUS): #{@traits[3]}
+- Video Tone: #{@trait.first}
+- Main Professional Strength (PRIMARY FOCUS): #{@trait.second}
+- Experience Level: #{@trait.third}
+- Career Motivation (PRIMARY FOCUS): #{@trait.fourth}
 
 Priority & content rules:
 - Allocate ~65% of the script to the two PRIMARY FOCUS items (strength + motivation).
@@ -261,14 +265,14 @@ Non-fabrication rules (strict):
 
 Constraints:
 - 135–200 words (aim ~165) to fit 60–90 seconds at natural speaking pace.
-- Conversational, confident, and #{ @traits[0] } in tone. Write in first person (“I…”).
+- Conversational, confident, and #{ @trait.first} in tone. Write in first person (“I…”).
 - Short, speakable sentences. Light stage directions in [brackets] only where helpful.
 
 Structure (with loose timestamps):
-- 0:00 Hook (1–2 lines): Introduction by name, quick human opener that hints at my #{@traits[3]}.
-- 0:10 Strength + proof (2–4 lines): spotlight #{@traits[1]} with ONE concrete example and outcome.
-- 0:35 Motivation & fit (2–3 lines): connect #{@traits[3]} to the value I’d create in the role/team.
-- 0:55 Experience frame (1–2 lines): position my #{@traits[2]} level succinctly (no list).
+- 0:00 Hook (1–2 lines): Introduction by name, quick human opener that hints at my #{@trait.fourth}.
+- 0:10 Strength + proof (2–4 lines): spotlight #{@trait.second} with ONE concrete example and outcome.
+- 0:35 Motivation & fit (2–3 lines): connect #{@trait.fourth} to the value I’d create in the role/team.
+- 0:55 Experience frame (1–2 lines): position my #{@trait.third} level succinctly (no list).
 - 1:10 Call-to-action (1–2 lines): invite next step; warm, concise close.
 
 Output format:
