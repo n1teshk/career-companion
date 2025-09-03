@@ -9,12 +9,16 @@ h1, h2, h3, p, label, textarea, button {
   font-family: inherit;
 }
 
+.page-header {
+  margin: 2rem 0 2rem 0;
+}
+
 .page-title {
   font-size: 2rem;
   font-weight: 800;
   color: #111827;
   text-align: center;
-  margin: 2rem 0 0.25rem 0;
+  margin-bottom: 0.5rem;
 }
 
 .page-subtitle {
