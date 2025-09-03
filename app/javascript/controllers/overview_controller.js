@@ -13,36 +13,34 @@ export default class extends Controller {
     this.updateFinalButton()
   }
 
-  finalizeCoverLetter(event) {
-    event.preventDefault()
-
+  finalizeCoverLetter() {
+    // Set the hidden input value before form submits
     this.coverLetterInputTarget.value = this.coverLetterOutputTarget.innerText || this.coverLetterOutputTarget.textContent || ""
-
+    
+    // Update UI immediately
     this.clFinalized = true
     this.coverLetterFinalizeBtnTarget.disabled = true
     this.coverLetterFinalizeBtnTarget.textContent = "Finalized"
     this.coverLetterFinalizeBtnTarget.classList.remove("btn-primary")
     this.coverLetterFinalizeBtnTarget.classList.add("btn-success")
-
+    
     this.updateFinalButton()
-
-    event.target.submit()
+    // Form will submit naturally
   }
 
-  finalizeVideoPitch(event) {
-    event.preventDefault()
-
+  finalizeVideoPitch() {
+    // Set the hidden input value before form submits
     this.videoPitchInputTarget.value = this.videoPitchOutputTarget.innerText || this.videoPitchOutputTarget.textContent || ""
-
+    
+    // Update UI immediately
     this.pitchFinalized = true
     this.videoPitchFinalizeBtnTarget.disabled = true
     this.videoPitchFinalizeBtnTarget.textContent = "Finalized"
     this.videoPitchFinalizeBtnTarget.classList.remove("btn-primary")
     this.videoPitchFinalizeBtnTarget.classList.add("btn-success")
-
+    
     this.updateFinalButton()
-
-    event.target.submit()
+    // Form will submit naturally
   }
 
   checkFinalized(event) {
@@ -54,15 +52,16 @@ export default class extends Controller {
   updateFinalButton() {
     const isEnabled = this.clFinalized && this.pitchFinalized
 
-    this.finalButtonTarget.classList.toggle("disabled", !isEnabled)
-    this.finalButtonTarget.classList.toggle("btn-success", isEnabled)
-    this.finalButtonTarget.classList.toggle("btn-primary", !isEnabled)
-    this.finalButtonTarget.setAttribute("aria-disabled", !isEnabled)
-
     if (isEnabled) {
+      this.finalButtonTarget.classList.remove("disabled", "disabled-state")
+      this.finalButtonTarget.classList.add("enabled-state")
       this.finalButtonTarget.style.pointerEvents = ""
     } else {
+      this.finalButtonTarget.classList.add("disabled", "disabled-state")
+      this.finalButtonTarget.classList.remove("enabled-state")
       this.finalButtonTarget.style.pointerEvents = "auto"
     }
+    
+    this.finalButtonTarget.setAttribute("aria-disabled", !isEnabled)
   }
 }
