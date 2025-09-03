@@ -15,32 +15,32 @@
               <div class="flex-grow-1 p-2 overflow-auto">
                 <div class="mb-3">
                   <h6 class="small text-muted mb-2">Tone</h6>
-                  <p class="small mb-0"><%= session[:trait_choice1] || "Not selected" %></p>
+                  <p class="small mb-0"><%= @trait.first || "Not selected" %></p>
                 </div>
                 <hr class="my-3" style="border-color: #e0e0e0;">
                 <div class="mb-3">
                   <h6 class="small text-muted mb-2">Professional Strength</h6>
                   <p class="small mb-0">
-                    <% if session[:trait_choice2] == "Other" %>
-                      <%= session[:trait_choice2_other] || "Not specified" %>
+                    <% if @trait.second == "Other" %>
+                      <%= @trait.second || "Not specified" %>
                     <% else %>
-                      <%= session[:trait_choice2] || "Not selected" %>
+                      <%= @trait.second || "Not selected" %>
                     <% end %>
                   </p>
                 </div>
                 <hr class="my-3" style="border-color: #e0e0e0;">
                 <div class="mb-3">
                   <h6 class="small text-muted mb-2">Experience Level</h6>
-                  <p class="small mb-0"><%= session[:trait_choice3] || "Not selected" %></p>
+                  <p class="small mb-0"><%= @trait.third || "Not selected" %></p>
                 </div>
                 <hr class="my-3" style="border-color: #e0e0e0;">
                 <div class="mb-3">
                   <h6 class="small text-muted mb-2">Career Motivation</h6>
                   <p class="small mb-0">
-                    <% if session[:trait_choice4] == "Other" %>
-                      <%= session[:trait_choice4_other] || "Not specified" %>
+                    <% if @trait.fourth == "Other" %>
+                      <%= @trait.fourth || "Not specified" %>
                     <% else %>
-                      <%= session[:trait_choice4] || "Not selected" %>
+                      <%= @trait.fourth || "Not selected" %>
                     <% end %>
                   </p>
                 </div>
