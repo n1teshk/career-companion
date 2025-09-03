@@ -56,11 +56,12 @@
     </div>
 
     <!-- Login/Signup buttons below features -->
-    <div class="text-center mb-5 ">
-      <%= link_to "Log In", new_user_session_path, class: "btn btn-outline-secondary btn-sm me-2 rounded-pill" %>
-      <%= link_to "Sign Up", new_user_registration_path, class: "btn btn-primary btn-sm rounded-pill" %>
-    </div>
-  </main>
+    <% unless user_signed_in? %>
+  <div class="text-center mb-5 ">
+    <%= link_to "Log In", new_user_session_path, class: "btn btn-outline-secondary btn-sm me-2 rounded-pill" %>
+    <%= link_to "Sign Up", new_user_registration_path, class: "btn btn-primary btn-sm rounded-pill" %>
+  </div>
+<% end %>
 
   <!-- Footer -->
   <footer class="text-center text-muted py-3 mt-auto border-top bg-white">
