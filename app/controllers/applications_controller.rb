@@ -346,6 +346,7 @@ end
   def video_page
     @application = Application.find(params[:id])
     @video = @application.videos.last
+    @cloudinary_url = url_for(@video.file) if @video&.file&.attached?
   end
 
   def new_video
@@ -358,12 +359,28 @@ end
     @application = Application.find(params[:id])
     @video = @application.videos.build
     @video.file = params[:video]
+
     if @video.save
-      redirect_to video_page_application_path(@application), notice: "Video was successfully created."
-    else
-      render :new_video, status: :unprocessable_entity
+      respond_to do |format|
+       format.html do
+          redirect_to video_page_application_path(@application),
+                      notice: "Video was successfully created."
+        end
+        format.json do
+          render json: {
+           url: url_for(@video.file),
+           content_type: @video.file.content_type,
+           cloudinary_url: url_for(@video.file)
+        }
+      end
+    end
+  else
+    respond_to do |format|
+      format.html { render :new_video, status: :unprocessable_entity }
+      format.json { render json: { errors: @video.errors.full_messages }, status: :unprocessable_entity }
     end
   end
+end
 
 
   private
