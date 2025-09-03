@@ -1,7 +1,9 @@
-<h1 class="page-title">Create New Application</h1>
-<h2 class="page-subtitle mb-5">
-  Upload your CV and the job description to get started with AI-powered application assistance
-</h2>
+<div class="page-header">
+  <h1 class="page-title">Create New Application</h1>
+  <h2 class="page-subtitle">
+    Upload your CV and the job description to get started with AI-powered application assistance
+  </h2>
+</div>
 
 <div class="centered-wrapper">
   <%= simple_form_for @application, html: { class: 'application-form', multipart: true, data: { controller: "application-form" } } do |f| %>
