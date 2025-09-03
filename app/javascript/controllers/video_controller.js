@@ -1,6 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
 
-// Connects to data-controller="video"
 export default class extends Controller {
   static values = { applicationId: String }
   static targets = ["uploaded"]
@@ -10,6 +9,25 @@ export default class extends Controller {
       console.log('LIVE');
       this.initRecordVideo();
     }
+  }
+
+  copyVideoLink(event) {
+    const input = this.element.querySelector('#videoLink');
+    const actualUrl = input.getAttribute('data-actual-url');
+
+    navigator.clipboard.writeText(actualUrl).then(() => {
+      const button = event.target.closest('button');
+      const originalText = button.innerHTML;
+      button.innerHTML = '<i class="bi bi-check"></i> Copied!';
+      button.classList.remove('btn-outline-secondary');
+      button.classList.add('btn-success');
+
+      setTimeout(() => {
+        button.innerHTML = originalText;
+        button.classList.remove('btn-success');
+        button.classList.add('btn-outline-secondary');
+      }, 2000);
+    });
   }
 
   initRecordVideo() {
@@ -78,7 +96,6 @@ export default class extends Controller {
 
           console.log(data);
 
-
           if (this.hasUploadedTarget) {
             this.uploadedTarget.innerHTML = `
               <video width="400" height="300" controls>
@@ -87,22 +104,26 @@ export default class extends Controller {
               </video>
 
               <div class="mt-2" id="cloudinary-link">
-                <label class="form-label d-block">Cloudinary link</label>
-                <div style="display:flex;gap:8px;align-items:center;">
-                  <input type="text"
-                        readonly
-                        value="${data.cloudinary_url}"
-                        class="form-control"
-                        style="flex:1;">
+                <label class="form-label d-block">Video Link</label>
+                <div class="d-flex gap-2 align-items-center">
+                  <input id="videoLink"
+                         type="text"
+                         readonly
+                         value="Link to video pitch"
+                         class="form-control flex-fill"
+                         data-actual-url="${data.cloudinary_url}"
+                         data-action="click->video#copyVideoLink">
                   <button type="button"
                           class="btn btn-outline-secondary"
-                          onclick="navigator.clipboard.writeText('${data.cloudinary_url}')">
-                    Copy
+                          data-action="click->video#copyVideoLink">
+                    <i class="bi bi-clipboard"></i> Copy
                   </button>
                   <a href="${data.cloudinary_url}"
-                    target="_blank"
-                    rel="noopener"
-                    class="btn btn-primary">Open</a>
+                     target="_blank"
+                     rel="noopener"
+                     class="btn btn-primary">
+                    <i class="bi bi-box-arrow-up-right"></i> Open
+                  </a>
                 </div>
               </div>
             `;
