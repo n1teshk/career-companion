@@ -4,96 +4,81 @@
     Record your video pitch using the Teleprompter
   </h2>
 </div>
-
-<div data-controller="video" data-video-application-id-value="<%= params[:id] %>">
-  <div class="container my-5 d-flex justify-content-center">
-    <div class="flex-column" style="max-width: 600px; width: 100%;">
-
-      <div class="p-4 border rounded shadow-sm mb-4 bg-dark text-white">
-        <h2 class="h5 mb-2 text-center">Teleprompter</h2>
-        <div id="teleprompter-text" style="overflow:hidden; height:150px; font-size:1.2rem; line-height:1.5;">
-          <%= simple_format(@application.cl_message) %>
+<div class="container-fluid" data-controller="video" data-video-application-id-value="<%= params[:id] %>">
+  <div class="row justify-content-center">
+    <div class="col-8 col-lg-8 col-xl-6">
+      <div class="p-4 rounded-4 shadow bg-white border">
+        <div class="d-flex flex-column justify-content-center align-items-center p-1 m-1">
+          <div class="position-relative border rounded-4 shadow-sm bg-dark text-white mb-3" style="width: 100%; height: 450px;">
+            <video id="live" data-video-target="display" autoplay muted playsinline style="width:100%; height:100%; object-fit:cover; border-radius:16px;"></video>
+            <div data-video-target="teleprompter" style="
+                 position:absolute;
+                 top:20px;
+                 left:50%;
+                 transform:translateX(-50%);
+                 width:50%;
+                 height:60px;
+                 overflow:hidden;
+                 color:white;
+                 font-size:1.2rem;
+                 line-height:1.5;
+                 text-align:center;
+                 pointer-events:none;
+                 text-shadow:1px 1px 3px rgba(0,0,0,0.7); font-weight:500;">
+              <strong>TELEPROMPTER:</strong>
+              <div style="margin-top:5px;">
+                <%= simple_format(@application.video_message) %>
+              </div>
+            </div>
+          </div>
+          <div class="d-flex gap-2 mb-3" style="width: 100%;">
+            <button type="button" id="start" data-video-target="recordButton" class="btn btn-primary btn-lg flex-fill">Start Recording</button>
+            <button type="button" id="stop" class="btn btn-danger btn-lg flex-fill">Stop Recording</button>
+          </div>
         </div>
-        <div class="d-flex justify-content-center gap-2 mt-2">
-          <button id="start-scroll" class="btn btn-outline-light flex-grow-1">Start Scrolling</button>
-          <button id="pause-scroll" class="btn btn-outline-secondary flex-grow-1">Pause</button>
+        <!-- Uploaded Video Section -->
+        <div class="mt-4">
+          <h5 class="text-center mb-3">Uploaded Video</h5>
+          <div data-video-target="uploaded">
+            <% if @video&.file&.attached? %>
+              <video width="100%" height="300" controls style="border-radius:6px;">
+                <source src="<%= url_for(@video.file) %>" type="<%= @video.file.content_type %>">
+                Your browser does not support the video tag.
+              </video>
+              <div class="mt-2" id="cloudinary-link">
+                <label class="form-label d-block">Cloudinary link</label>
+                <div style="display:flex;gap:8px;align-items:center;">
+                  <% cloudinary_url = url_for(@video.file) %>
+                  <input id="videoLink"
+                         type="text"
+                         readonly
+                         value="<%= cloudinary_url %>"
+                         class="form-control"
+                         style="flex:1;">
+                  <button type="button"
+                          class="btn btn-outline-secondary"
+                          onclick="navigator.clipboard.writeText(document.getElementById('videoLink').value)">
+                    Copy
+                  </button>
+                  <%= link_to "Open", cloudinary_url, target: "_blank", rel: "noopener", class: "btn btn-primary" %>
+                </div>
+              </div>
+            <% else %>
+              <p class="text-center text-muted">No video uploaded yet.</p>
+            <% end %>
+          </div>
         </div>
       </div>
-
-      <div class="p-4 border rounded shadow-sm mb-4 bg-white">
-        <h2 class="h5 mb-3 text-center">Record Your Video!</h2>
-
-        <div class="d-flex justify-content-center gap-2 mb-3">
-          <button type="button" id="start" class="btn btn-outline-primary flex-grow-1">Start</button>
-          <button type="button" id="stop" class="btn btn-outline-danger flex-grow-1">Stop</button>
-        </div>
-
-        <div>
-          <video id="live" width="600" height="200" autoplay muted style="border:1px solid black; border-radius:6px;"></video>
-        </div>
-      </div>
-
-<div class="p-4 border rounded shadow-sm bg-white">
-  <h2 class="h5 mb-3 text-center">Uploaded Video</h2>
-  <div data-video-target="uploaded">
-    <% if @video&.file&.attached? %>
-      <video width="400" height="300" controls style="border-radius:6px;">
-        <source src="<%= url_for(@video.file) %>" type="<%= @video.file.content_type %>">
-        Your browser does not support the video tag.
-      </video>
-
-      <div class="mt-2" id="cloudinary-link">
-        <label class="form-label d-block">Cloudinary link</label>
-        <div style="display:flex;gap:8px;align-items:center;">
-          <% cloudinary_url = url_for(@video.file) %>
-          <input id="videoLink"
-                 type="text"
-                 readonly
-                 value="<%= cloudinary_url %>"
-                 class="form-control"
-                 style="flex:1;">
-          <button type="button"
-                  class="btn btn-outline-secondary"
-                  onclick="navigator.clipboard.writeText(document.getElementById('videoLink').value)">
-            Copy
-          </button>
-          <%= link_to "Open", cloudinary_url, target: "_blank", rel: "noopener", class: "btn btn-primary" %>
-        </div>
-      </div>
-    <% else %>
-      <p class="text-center text-muted">No video uploaded yet.</p>
-    <% end %>
+    </div>
   </div>
-</div>
-
-
   <div class="d-flex justify-content-center gap-3 mt-4">
     <%= link_to "← Back", overview_application_path(@application), class: "next-button" %>
     <%= link_to "Finish Application →", application_path(@application),
-        class: "next-button disabled-state",
-        data: { video_target: "finishButton" },
-        disabled: true %>
+        class: "next-button enabled-state",
+        data: { video_target: "finishButton" } %>
   </div>
 </div>
-
 <style>
   .shadow-sm { box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075) !important; }
   button:disabled { cursor: not-allowed; opacity:0.6; }
 </style>
-
-<script>
-  let scrollInterval;
-  const teleprompter = document.getElementById('teleprompter-text');
-  const scrollSpeed = 0.5;
-  const intervalTime = 30;
-
-  document.getElementById('start-scroll').addEventListener('click', () => {
-    if (scrollInterval) clearInterval(scrollInterval);
-    scrollInterval = setInterval(() => { teleprompter.scrollTop += scrollSpeed; }, intervalTime);
-  });
-
-  document.getElementById('pause-scroll').addEventListener('click', () => {
-    clearInterval(scrollInterval);
-  });
-
-</script>
