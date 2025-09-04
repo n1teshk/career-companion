@@ -13,7 +13,7 @@ export default class extends Controller {
   initTeleprompter() {
     let scrollInterval;
     const teleprompter = this.teleprompterTarget;
-    const scrollSpeed = 0.5;
+    const scrollSpeed = 0.3;
     const intervalTime = 30;
     // Auto-start teleprompter when recording starts
     document.getElementById('start').addEventListener('click', () => {
