@@ -8,8 +8,11 @@ export default class extends Controller {
   ]
 
   connect() {
-    this.clFinalized = false
-    this.pitchFinalized = false
+    // Check if already finalized based on button state and data attributes
+    this.clFinalized = this.coverLetterFinalizeBtnTarget.dataset.finalized === "true" || 
+                       this.coverLetterFinalizeBtnTarget.disabled
+    this.pitchFinalized = this.videoPitchFinalizeBtnTarget.dataset.finalized === "true" || 
+                          this.videoPitchFinalizeBtnTarget.disabled
     this.updateFinalButton()
   }
 

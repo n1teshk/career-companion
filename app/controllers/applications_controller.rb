@@ -310,6 +310,15 @@ end
       my resume when generating the contents.")
     @message = response.content
 
+    # Save the new generated content to database
+    @application.update!(cl_message: @message)
+
+    # Clear the finalized content since we have new content
+    if @application.finals.last.present?
+      @application.finals.last.update(cl: nil)
+    end
+
+    redirect_to overview_application_path(@application), notice: "Cover letter regenerated."
   end
 
 
@@ -324,9 +333,17 @@ end
       my resume when generating the contents.")
     @message = response.content
 
-     respond_to do |format|
-    format.html { redirect_to overview_application_path(@application), notice: "Video generated." }
-    format.turbo_stream
+    # Save the new generated content to database
+    @application.update!(video_message: @message)
+
+    # Clear the finalized content since we have new content
+    if @application.finals.last.present?
+      @application.finals.last.update(pitch: nil)
+    end
+
+    respond_to do |format|
+      format.html { redirect_to overview_application_path(@application), notice: "Video pitch regenerated." }
+      format.turbo_stream
     end
   end
 
@@ -349,7 +366,7 @@ end
   def video_page
     @application = Application.find(params[:id])
     @video = @application.videos.last
-    @cloudinary_url = url_for(@video.file) if @video&.file&.attached?
+    @cloudinary_url = @video.file.url if @video&.file&.attached?
   end
 
   def new_video
@@ -371,9 +388,9 @@ end
         end
         format.json do
           render json: {
-           url: url_for(@video.file),
+           url: @video.file.url,
            content_type: @video.file.content_type,
-           cloudinary_url: url_for(@video.file)
+           cloudinary_url: @video.file.url
         }
       end
     end

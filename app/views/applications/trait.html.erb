@@ -94,7 +94,8 @@
         </div>
       <% end %>
 
-      <div class="d-flex justify-content-center mt-4">
+      <div class="d-flex justify-content-center gap-3 mt-4">
+        <%= link_to "← Back", new_application_path, class: "next-button" %>
         <%= submit_tag "Generate Cover Letter & Video Pitch →",
             id: "nextBtn",
             class: "next-button disabled-state",

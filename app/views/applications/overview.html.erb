@@ -17,32 +17,32 @@
               <div class="flex-grow-1 p-2 overflow-auto">
                 <div class="mb-3">
                   <h6 class="small text-muted mb-2">Tone</h6>
-                  <p class="small mb-0"><%= @trait.first || "Not selected" %></p>
+                  <p class="small mb-0"><%= session[:trait_choice1] || "Not selected" %></p>
                 </div>
                 <hr class="my-3" style="border-color: #e0e0e0;">
                 <div class="mb-3">
                   <h6 class="small text-muted mb-2">Professional Strength</h6>
                   <p class="small mb-0">
-                    <% if @trait.second == "Other" %>
-                      <%= @trait.second || "Not specified" %>
+                    <% if session[:trait_choice2] == "Other" %>
+                      <%= session[:trait_choice2_other] || "Not specified" %>
                     <% else %>
-                      <%= @trait.second || "Not selected" %>
+                      <%= session[:trait_choice2] || "Not selected" %>
                     <% end %>
                   </p>
                 </div>
                 <hr class="my-3" style="border-color: #e0e0e0;">
                 <div class="mb-3">
                   <h6 class="small text-muted mb-2">Experience Level</h6>
-                  <p class="small mb-0"><%= @trait.third || "Not selected" %></p>
+                  <p class="small mb-0"><%= session[:trait_choice3] || "Not selected" %></p>
                 </div>
                 <hr class="my-3" style="border-color: #e0e0e0;">
                 <div class="mb-3">
                   <h6 class="small text-muted mb-2">Career Motivation</h6>
                   <p class="small mb-0">
-                    <% if @trait.fourth == "Other" %>
-                      <%= @trait.fourth || "Not specified" %>
+                    <% if session[:trait_choice4] == "Other" %>
+                      <%= session[:trait_choice4_other] || "Not specified" %>
                     <% else %>
-                      <%= @trait.fourth || "Not selected" %>
+                      <%= session[:trait_choice4] || "Not selected" %>
                     <% end %>
                   </p>
                 </div>
@@ -70,7 +70,19 @@
               <div class="col-6">
                 <%= form_with url: final_cl_application_path(@application), method: :post, data: { action: "submit->overview#finalizeCoverLetter" }, class: "w-100" do |form| %>
                   <%= form.hidden_field :final_cl, data: { overview_target: "coverLetterInput" } %>
-                  <%= form.submit "Finalize", class: "btn btn-primary w-100 m-1", data: { overview_target: "coverLetterFinalizeBtn" } %>
+                  <%
+                    cl_finalized = @application.finals.last&.cl.present?
+                    cl_btn_class = cl_finalized ? "btn btn-success w-100 m-1" : "btn btn-primary w-100 m-1"
+                    cl_btn_text = cl_finalized ? "Finalized" : "Finalize"
+                    cl_disabled = cl_finalized
+                  %>
+                  <%= form.submit cl_btn_text,
+                      class: cl_btn_class,
+                      disabled: cl_disabled,
+                      data: {
+                        overview_target: "coverLetterFinalizeBtn",
+                        finalized: cl_finalized.to_s
+                      } %>
                 <% end %>
               </div>
             </div>
@@ -96,7 +108,19 @@
               <div class="col-6">
                 <%= form_with url: final_pitch_application_path(@application), method: :post, data: { action: "submit->overview#finalizeVideoPitch" }, class: "w-100" do |form| %>
                   <%= form.hidden_field :final_pitch, data: { overview_target: "videoPitchInput" } %>
-                  <%= form.submit "Finalize", class: "btn btn-primary w-100 m-1", data: { overview_target: "videoPitchFinalizeBtn" } %>
+                  <%
+                    pitch_finalized = @application.finals.last&.pitch.present?
+                    pitch_btn_class = pitch_finalized ? "btn btn-success w-100 m-1" : "btn btn-primary w-100 m-1"
+                    pitch_btn_text = pitch_finalized ? "Finalized" : "Finalize"
+                    pitch_disabled = pitch_finalized
+                  %>
+                  <%= form.submit pitch_btn_text,
+                      class: pitch_btn_class,
+                      disabled: pitch_disabled,
+                      data: {
+                        overview_target: "videoPitchFinalizeBtn",
+                        finalized: pitch_finalized.to_s
+                      } %>
                 <% end %>
               </div>
             </div>
@@ -106,9 +130,11 @@
     </div>
   </div>
 
-  <div class="d-flex justify-content-center mt-4">
+  <div class="d-flex justify-content-center gap-3 mt-4">
+    <%= link_to "← Back", trait_application_path(@application), class: "next-button" %>
     <%= link_to "Record Your Video →", video_page_application_path(@application),
       class: "next-button disabled-state",
       data: { overview_target: "finalButton", action: "click->overview#checkFinalized" } %>
   </div>
 </div>
+
