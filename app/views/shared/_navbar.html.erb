@@ -16,6 +16,15 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav ms-auto align-items-lg-center">
         <% if user_signed_in? %>
+          <li class="nav-item">
+            <%= link_to "Features", root_path(anchor: "features"), class: "nav-link fw-medium me-3" %>
+          </li>
+          <li class="nav-item">
+            <%= link_to "How It Works", root_path(anchor: "how-it-works"), class: "nav-link fw-medium me-3" %>
+          </li>
+          <li class="nav-item">
+            <%= link_to "Testimonials", root_path(anchor: "testimonials"), class: "nav-link fw-medium me-3" %>
+          </li>
           <li class="nav-item me-3">
             <%= link_to "Dashboard", applications_path, class: "btn px-4 py-2 rounded-3 fw-medium navbar-btn" %>
           </li>
@@ -30,6 +39,15 @@
             </div>
           </li>
         <% else %>
+          <li class="nav-item">
+            <%= link_to "Features", root_path(anchor: "features"), class: "nav-link fw-medium me-3" %>
+          </li>
+          <li class="nav-item">
+            <%= link_to "How It Works", root_path(anchor: "how-it-works"), class: "nav-link fw-medium me-3" %>
+          </li>
+          <li class="nav-item">
+            <%= link_to "Testimonials", root_path(anchor: "testimonials"), class: "nav-link fw-medium me-3" %>
+          </li>
           <li class="nav-item">
             <%= link_to "Login", new_user_session_path, class: "btn px-4 py-2 rounded-3 fw-medium navbar-btn" %>
           </li>
