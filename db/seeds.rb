@@ -132,8 +132,3 @@ sample_video_pitches = [
     puts "✅ Created application: #{application.title} at #{application.name}"
   end
 end
-
-puts "\n🎉 Sample data created for both users!"
-puts "🔑 Login credentials:"
-puts "   Demo: demo@example.com / password123"
-puts "   Your account: anna.ullmann@gmail.com / password123"
