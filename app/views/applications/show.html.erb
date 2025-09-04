@@ -140,7 +140,7 @@
             <div id="coverLetterContent" class="p-2 overflow-auto flex-grow-1">
               <%= simple_format(@application.finals.last.cl) %>
               <% if (video = @application.videos.last) && video.file.attached? %>
-                <% cloudinary_url = url_for(video.file) %>
+                <% cloudinary_url = video.file.respond_to?(:url) ? video.file.url : url_for(video.file) %>
                 <p>Please <a href="<%= cloudinary_url %>" target="_blank" rel="noopener">click here</a> to see the video.</p>
               <% end %>
             </div>
@@ -159,14 +159,14 @@
                   data-bs-target="#shareModal"
                   data-controller="copy-share"
                   data-action="click->copy-share#openShareModal"
-                  data-copy-share-share-url-param="<%= url_for(video.file) %>"
+                  data-copy-share-share-url-param="<%= video.file.respond_to?(:url) ? video.file.url : url_for(video.file) %>"
                   title="Share video link"
                   style="color: #6c757d; border: none; background: none;"
                 >
                   <i class="bi bi-share"></i>
                 </button>
                 <a
-                  href="<%= url_for(video.file) %>"
+                  href="<%= video.file.respond_to?(:url) ? video.file.url : url_for(video.file) %>"
                   download="<%= video.file.filename %>"
                   class="btn btn-sm"
                   title="Download Video"
@@ -229,7 +229,7 @@
             <div class="pt-4 px-2 d-flex justify-content-center align-items-start flex-grow-1 overflow-auto">
               <% if (video = @application.videos.last) && video.file.attached? %>
                 <video controls style="width: 100%; height: auto; max-height: 100%;">
-                  <source src="<%= url_for(video.file) %>" type="<%= video.file.content_type %>">
+                  <source src="<%= video.file.respond_to?(:url) ? video.file.url : url_for(video.file) %>" type="<%= video.file.content_type %>">
                   Your browser does not support the video tag.
                 </video>
               <% elsif @video&.file&.attached? %>
@@ -260,7 +260,7 @@
         </div>
       </div>
 
-      <div class="d-flex justify-content-center gap-3 mt-4 mb-5">
+      <div class="d-flex justify-content-center align-items-center gap-3" style="padding-top: 3rem; padding-bottom: 3rem;">
         <%= link_to "Go to Dashboard", applications_path, class: "btn btn-success px-3 py-2 rounded-3" %>
         <%= link_to "Create New Application", new_application_path, class: "btn btn-primary px-3 py-2 rounded-3" %>
       </div>
@@ -268,6 +268,6 @@
   </div>
 </div>
 
-<div class="pb-5"></div>
+<div class="pb-3"></div>
 
 <%= render "shared/share_modals" %>

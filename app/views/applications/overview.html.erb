@@ -130,10 +130,12 @@
     </div>
   </div>
 
-  <div class="d-flex justify-content-center gap-3 mt-4">
+    <div class="d-flex justify-content-center align-items-center gap-3" style="padding-top: 3rem; padding-bottom: 3rem;">
     <%= link_to "← Back", trait_application_path(@application), class: "next-button" %>
     <%= link_to "Record Your Video →", video_page_application_path(@application),
       class: "next-button disabled-state",
       data: { overview_target: "finalButton", action: "click->overview#checkFinalized" } %>
   </div>
 </div>
+
+            <div class="pb-3"></div>
