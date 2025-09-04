@@ -1,50 +1,54 @@
-<div data-controller="video" data-video-application-id-value="<%= params[:id] %>">
-  <div class="container my-5 d-flex justify-content-center">
-    <div class="flex-column" style="max-width: 800px; width: 100%;">
+<div class="page-header">
+  <h1 class="page-title">Record Your Video Pitch</h1>
+  <h2 class="page-subtitle">
+    Record your video pitch using the Teleprompter
+  </h2>
+</div>
 
-      <div class="d-flex justify-content-between align-items-center mb-3">
-        <%= link_to "← Back", overview_application_path(@application), class: "btn btn-outline-warning" %>
-        <h2 class="h5 mb-0 text-center flex-grow-1">Record Your Video!</h2>
-        <div style="width:100px;"></div>
-      </div>
+<div class="container-fluid" data-controller="video" data-video-application-id-value="<%= params[:id] %>">
+  <div class="row justify-content-center">
+    <div class="col-8 col-lg-8 col-xl-6">
+      <div class="p-4 rounded-4 shadow bg-white border">
 
-      <div class="position-relative p-0 border rounded shadow-sm mb-4 bg-dark text-white" style="height: 450px;">
-        <video data-video-target="display" autoplay muted playsinline style="width:100%; height:100%; object-fit:cover; border-radius:6px;"></video>
 
-        <div data-video-target="teleprompter" style="
-             position:absolute;
-             top:20px;
-             left:50%;
-             transform:translateX(-50%);
-             width:50%;
-             height:60px;
-             overflow:hidden;
-             color:white;
-             font-size:1.2rem;
-             line-height:1.5;
-             text-align:center;
-             pointer-events:none;
-             text-shadow:1px 1px 3px rgba(0,0,0,0.7); font-weight:500;">
-          <strong>TELEPROMPTER:</strong>
-          <div style="margin-top:5px;">
-            <%= simple_format(@application.video_message) %>
+        <div class="d-flex flex-column justify-content-center align-items-center p-1 m-1">
+          <div class="position-relative border rounded-4 shadow-sm bg-dark text-white mb-3" style="width: 100%; height: 450px;">
+            <video data-video-target="display" autoplay muted playsinline style="width:100%; height:100%; object-fit:cover; border-radius:16px;"></video>
+
+            <div data-video-target="teleprompter" style="
+                 position:absolute;
+                 top:20px;
+                 left:50%;
+                 transform:translateX(-50%);
+                 width:50%;
+                 height:60px;
+                 overflow:hidden;
+                 color:white;
+                 font-size:1.2rem;
+                 line-height:1.5;
+                 text-align:center;
+                 pointer-events:none;
+                 text-shadow:1px 1px 3px rgba(0,0,0,0.7); font-weight:500;">
+              <strong>TELEPROMPTER:</strong>
+              <div style="margin-top:5px;">
+                <%= simple_format(@application.video_message) %>
+              </div>
+            </div>
           </div>
+
+          <button data-video-target="recordButton" class="btn btn-primary btn-lg" style="width:100%;">Start Recording</button>
         </div>
+
       </div>
-
-      <div class="d-flex justify-content-center mb-3">
-        <button data-video-target="recordButton" class="btn btn-primary btn-lg" style="width:100%;">Start</button>
-      </div>
-
-      <div class="d-flex justify-content-center">
-        <%= link_to "Finish Application! →", application_path(@application),
-            class: "btn btn-success btn-lg",
-            data: { video_target: "finishButton" },
-            disabled: true %>
-      </div>
-
-
     </div>
+  </div>
+
+  <div class="d-flex justify-content-center gap-3 mt-4">
+    <%= link_to "← Back", overview_application_path(@application), class: "next-button" %>
+    <%= link_to "Finish Application →", application_path(@application),
+        class: "next-button disabled-state",
+        data: { video_target: "finishButton" },
+        disabled: true %>
   </div>
 </div>
 

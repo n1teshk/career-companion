@@ -4,7 +4,8 @@
     Your final cover letter and video pitch are ready to be used
   </h2>
 </div>
-<div class="container-fluid" data-controller="copy-share">
+
+<div class="container-fluid">
   <div class="d-flex justify-content-center" style="width: 1400px; margin: 0 auto;">
     <div class="d-flex flex-column" style="width: 100%;">
       <div class="d-flex justify-content-between align-items-center mb-4 p-4 rounded-4 shadow bg-white border">
@@ -36,16 +37,16 @@
               <div class="flex-grow-1 p-2 overflow-auto">
                 <div class="mb-3">
                   <h6 class="small text-muted mb-2">Tone</h6>
-                  <p class="small mb-0"><%= @trait.first || "Not selected" %></p>
+                  <p class="small mb-0"><%= session[:trait_choice1] || "Not selected" %></p>
                 </div>
                 <hr class="my-3" style="border-color: #e0e0e0;">
                 <div class="mb-3">
                   <h6 class="small text-muted mb-2">Professional Strength</h6>
                   <p class="small mb-0">
-                    <% if @trait.second == "Other" %>
-                      <%= @trait.second || "Not selected" %>
+                    <% if session[:trait_choice2] == "Other" %>
+                      <%= session[:trait_choice2_other] || "Not selected" %>
                     <% else %>
-                      <%= @trait.second || "Not selected" %>
+                      <%= session[:trait_choice2] || "Not selected" %>
                     <% end %>
                   </p>
                 </div>
@@ -53,10 +54,10 @@
                 <div class="mb-3">
                   <h6 class="small text-muted mb-2">Highlight an accomplishment</h6>
                   <p class="small mb-0">
-                    <% if @trait.third == "Other" %>
-                      <%= @trait.third || "Not selected" %>
+                    <% if session[:trait_choice3] == "Other" %>
+                      <%= session[:trait_choice3_other] || "Not selected" %>
                     <% else %>
-                      <%= @trait.third || "Not selected" %>
+                      <%= session[:trait_choice3] || "Not selected" %>
                     <% end %>
                   </p>
                 </div>
@@ -64,10 +65,10 @@
                 <div class="mb-3">
                   <h6 class="small text-muted mb-2">Video Pitch Personality</h6>
                   <p class="small mb-0">
-                    <% if @trait.fourth == "Other" %>
-                      <%= @trait.fourth || "Not selected" %>
+                    <% if session[:trait_choice4] == "Other" %>
+                      <%= session[:trait_choice4_other] || "Not selected" %>
                     <% else %>
-                      <%= @trait.fourth || "Not selected" %>
+                      <%= session[:trait_choice4] || "Not selected" %>
                     <% end %>
                   </p>
                 </div>
@@ -99,14 +100,26 @@
           </div>
         </div>
 
-        <div class="d-flex flex-column p-4 rounded-4 shadow bg-white border" style="flex: 0 0 38.25%; max-width: 38.25%%; height: 600px;">
+        <div class="d-flex flex-column p-4 rounded-4 shadow bg-white border" style="flex: 0 0 38.25%; max-width: 38.25%; height: 600px;">
           <div class="d-flex align-items-center mb-4">
             <h2 class="h5 mb-0 text-center flex-grow-1"><strong>Final Cover Letter</strong></h2>
             <div class="d-flex gap-2 align-items-center">
               <button
                 type="button"
                 class="btn btn-sm"
-                onclick="navigator.clipboard.writeText(document.getElementById('coverLetterContent').innerText); this.innerHTML = '<i class=\'bi bi-check\'></i>'; setTimeout(() => { this.innerHTML = '<i class=\'bi bi-copy\'></i>' }, 2000);"
+                data-bs-toggle="modal"
+                data-bs-target="#shareCoverLetterModal"
+                title="Share cover letter"
+                style="color: #6c757d; border: none; background: none;"
+              >
+                <i class="bi bi-share"></i>
+              </button>
+              <button
+                type="button"
+                class="btn btn-sm"
+                data-controller="copy-share"
+                data-action="click->copy-share#copyContent"
+                data-copy-share-content-id-param="coverLetterContent"
                 title="Copy to clipboard"
                 style="color: #6c757d; border: none; background: none;"
               >
@@ -137,13 +150,14 @@
         <div class="d-flex flex-column p-4 rounded-4 shadow bg-white border" style="flex: 0 0 38.25%; max-width: 38.25%; height: 600px;">
           <div class="d-flex align-items-center mb-4">
             <h2 class="h5 mb-0 text-center flex-grow-1"><strong>Final Video Pitch</strong></h2>
-.            <% if (video = @application.videos.last) && video.file.attached? %>
+            <% if (video = @application.videos.last) && video.file.attached? %>
               <div class="d-flex gap-2 align-items-center">
                 <button
                   type="button"
                   class="btn btn-sm"
                   data-bs-toggle="modal"
                   data-bs-target="#shareModal"
+                  data-controller="copy-share"
                   data-action="click->copy-share#openShareModal"
                   data-copy-share-share-url-param="<%= url_for(video.file) %>"
                   title="Share video link"
@@ -168,18 +182,42 @@
                   class="btn btn-sm"
                   data-bs-toggle="modal"
                   data-bs-target="#shareModal"
+                  data-controller="copy-share"
                   data-action="click->copy-share#openShareModal"
-                  data-copy-share-share-url-param="<%= url_for(@video.file) %>"
+                  data-copy-share-share-url-param="<%= @video.file.url %>"
                   title="Share video link"
                   style="color: #6c757d; border: none; background: none;"
                 >
                   <i class="bi bi-share"></i>
                 </button>
                 <a
-                  href="<%= url_for(@video.file) %>"
+                  href="<%= @video.file.url %>"
                   download="<%= @video.file.filename %>"
                   class="btn btn-sm"
                   title="Download Video"
+                  style="color: #6c757d; border: none; background: none;"
+                >
+                  <i class="bi bi-download"></i>
+                </a>
+              </div>
+            <% elsif @application.finals.last&.pitch.present? %>
+              <div class="d-flex gap-2 align-items-center">
+                <button
+                  type="button"
+                  class="btn btn-sm"
+                  data-controller="copy-share"
+                  data-action="click->copy-share#copyContent"
+                  data-copy-share-content-id-param="videoPitchContent"
+                  title="Copy pitch script"
+                  style="color: #6c757d; border: none; background: none;"
+                >
+                  <i class="bi bi-copy"></i>
+                </button>
+                <a
+                  class="btn btn-sm"
+                  href="data:text/plain;charset=utf-8,<%= ERB::Util.url_encode(@application.finals.last.pitch || '') %>"
+                  download="video_pitch_<%= @application.title.parameterize.underscore %>.txt"
+                  title="Download pitch script"
                   style="color: #6c757d; border: none; background: none;"
                 >
                   <i class="bi bi-download"></i>
@@ -196,7 +234,7 @@
                 </video>
               <% elsif @video&.file&.attached? %>
                 <video controls style="width: 100%; height: auto; max-height: 100%;">
-                  <source src="<%= url_for(@video.file) %>" type="<%= @video.file.content_type %>">
+                  <source src="<%= @video.file.url %>" type="<%= @video.file.content_type %>">
                   Your browser does not support the video tag.
                 </video>
               <% else %>
@@ -222,87 +260,14 @@
         </div>
       </div>
 
-      <div class="d-flex justify-content-center gap-2 m-4 p-6">
-
-        <%= link_to "Go to Dashboard", applications_path, class: "btn btn-success px-4 py-2" %>
-        <%= link_to "Create New Application", new_application_path, class: "btn btn-primary px-4 py-2" %>
+      <div class="d-flex justify-content-center gap-3 mt-4 mb-5">
+        <%= link_to "Go to Dashboard", applications_path, class: "btn btn-success px-3 py-2 rounded-3" %>
+        <%= link_to "Create New Application", new_application_path, class: "btn btn-primary px-3 py-2 rounded-3" %>
       </div>
     </div>
   </div>
 </div>
 
-<div class="modal fade" id="shareModal" tabindex="-1" aria-labelledby="shareModalLabel" aria-hidden="true" data-controller="copy-share">
-  <div class="modal-dialog modal-dialog-centered modal-lg">
-    <div class="modal-content border-0" style="border-radius: 20px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); box-shadow: 0 20px 40px rgba(0,0,0,0.1);">
+<div class="pb-5"></div>
 
-      <div class="modal-header border-0 pb-0" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 20px 20px 0 0; padding: 2rem 2rem 1.5rem 2rem;">
-        <div class="text-center w-100">
-          <div class="d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px; background: rgba(255,255,255,0.2); border-radius: 50%; backdrop-filter: blur(10px);">
-            <i class="bi bi-share" style="font-size: 1.8rem; color: white;"></i>
-          </div>
-          <h3 class="modal-title text-white mb-2 fw-bold" id="shareModalLabel">Share Your Video Pitch</h3>
-          <p class="text-white mb-0" style="opacity: 0.9; font-size: 0.95rem;">Choose how you'd like to share your professional video pitch</p>
-        </div>
-        <button type="button" class="btn-close btn-close-white position-absolute top-0 end-0 m-3" data-bs-dismiss="modal" aria-label="Close" style="opacity: 0.8;"></button>
-      </div>
-
-      <div class="modal-body p-4" style="padding: 2rem 2rem 1rem 2rem !important;">
-        <div class="mb-4">
-          <div class="p-4 bg-white border-0 shadow-sm" style="border-radius: 16px;">
-            <div class="d-flex align-items-center mb-3">
-              <div class="d-inline-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 10px;">
-                <i class="bi bi-link-45deg text-white" style="font-size: 1.2rem;"></i>
-              </div>
-              <h6 class="mb-0 fw-semibold text-dark">Direct Link</h6>
-            </div>
-            <div class="d-flex gap-2 align-items-center">
-              <input type="text" class="form-control flex-grow-1 border-0" id="videoUrl" readonly style="font-size: 0.9rem; background-color: #f8f9fa; padding: 12px 16px; border-radius: 12px; font-family: 'Monaco', 'Menlo', monospace;">
-              <button class="btn flex-shrink-0 d-flex align-items-center justify-content-center" type="button" data-action="click->copy-share#copyContent" data-copy-share-content-id-param="videoUrl" title="Copy link" style="width: 44px; height: 44px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; border-radius: 12px; color: white;">
-                <i class="bi bi-copy" style="font-size: 1.1rem;"></i>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div>
-          <div class="d-flex align-items-center mb-3">
-            <div class="d-inline-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 10px;">
-              <i class="bi bi-broadcast text-white" style="font-size: 1.2rem;"></i>
-            </div>
-            <h6 class="mb-0 fw-semibold text-dark">Share On Social</h6>
-          </div>
-          <div class="row g-3">
-            <div class="col-6">
-              <a href="#" id="emailShare" class="btn w-100 d-flex align-items-center justify-content-center text-decoration-none" target="_blank" style="padding: 16px 12px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 14px; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);">
-                <i class="bi bi-envelope me-2" style="font-size: 1.3rem;"></i>
-                <span class="fw-semibold">Email</span>
-              </a>
-            </div>
-            <div class="col-6">
-              <a href="#" id="whatsappShare" class="btn w-100 d-flex align-items-center justify-content-center text-decoration-none" target="_blank" style="padding: 16px 12px; background: linear-gradient(135deg, #25D366 0%, #128C7E 100%); color: white; border: none; border-radius: 14px; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);">
-                <i class="bi bi-whatsapp me-2" style="font-size: 1.3rem;"></i>
-                <span class="fw-semibold">WhatsApp</span>
-              </a>
-            </div>
-            <div class="col-6">
-              <a href="#" id="linkedinShare" class="btn w-100 d-flex align-items-center justify-content-center text-decoration-none" target="_blank" style="padding: 16px 12px; background: linear-gradient(135deg, #0077B5 0%, #005885 100%); color: white; border: none; border-radius: 14px; box-shadow: 0 4px 15px rgba(0, 119, 181, 0.4);">
-                <i class="bi bi-linkedin me-2" style="font-size: 1.3rem;"></i>
-                <span class="fw-semibold">LinkedIn</span>
-              </a>
-            </div>
-            <div class="col-6">
-              <a href="#" id="twitterShare" class="btn w-100 d-flex align-items-center justify-content-center text-decoration-none" target="_blank" style="padding: 16px 12px; background: linear-gradient(135deg, #1DA1F2 0%, #1a91da 100%); color: white; border: none; border-radius: 14px; box-shadow: 0 4px 15px rgba(29, 161, 242, 0.4);">
-                <i class="bi bi-twitter me-2" style="font-size: 1.3rem;"></i>
-                <span class="fw-semibold">Twitter</span>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="modal-footer border-0 d-flex justify-content-center" style="padding: 1rem 2rem 2rem 2rem;">
-        <button type="button" class="btn px-5 py-2" data-bs-dismiss="modal" style="background: rgba(108, 117, 125, 0.1); color: #6c757d; border: 1px solid rgba(108, 117, 125, 0.2); border-radius: 12px; font-weight: 500;">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
+<%= render "shared/share_modals" %>

@@ -252,3 +252,77 @@ h1, h2, h3, p, label, textarea, button {
 .custom-modal-content button {
   margin-top: 15px;
 }
+
+// Navbar Styles
+.navbar-custom {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  backdrop-filter: blur(10px);
+}
+
+.navbar-brand-icon {
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(5px);
+}
+
+.navbar-brand-text {
+  font-size: 1.25rem;
+  letter-spacing: -0.02em;
+}
+
+.navbar-brand-icon i {
+  font-size: 1.2rem;
+  color: white;
+}
+
+.navbar-toggler-custom {
+  box-shadow: none;
+}
+
+.navbar-btn {
+  background: rgba(255,255,255,0.15);
+  color: white;
+  border: 1px solid rgba(255,255,255,0.2);
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+}
+
+.navbar-btn:hover {
+  background: rgba(255,255,255,0.25) !important;
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.navbar-avatar {
+  width: 40px;
+  height: 40px;
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(5px);
+  border: 2px solid rgba(255,255,255,0.2);
+}
+
+.navbar-avatar i {
+  font-size: 1.2rem;
+  color: white;
+}
+
+.navbar-dropdown {
+  border-radius: 12px;
+  background: white;
+  min-width: 180px;
+  margin-top: 0.5rem;
+}
+
+.navbar-dropdown-item {
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.navbar-dropdown-item:hover {
+  background: #f8f9fa !important;
+}
+
+.navbar-toggler:focus {
+  box-shadow: none !important;
+}
+

@@ -1,37 +1,40 @@
-<div class="navbar navbar-expand-sm navbar-dark" style="background-color: #0d6efd;">
-  <div class="container-fluid">
-    <%= link_to root_path, class: "navbar-brand fw-bold" do %>
-      PitchUpYourLife
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top shadow-sm navbar-custom">
+  <div class="container-fluid px-4">
+    <%= link_to root_path, class: "navbar-brand fw-bold d-flex align-items-center" do %>
+      <div class="d-flex align-items-center">
+        <div class="me-2 p-2 rounded-3 navbar-brand-icon">
+          <i class="bi bi-rocket-takeoff"></i>
+        </div>
+        <span class="navbar-brand-text">PitchUpYourLife</span>
+      </div>
     <% end %>
 
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler border-0 navbar-toggler-custom" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav ms-auto">
+      <ul class="navbar-nav ms-auto align-items-lg-center">
         <% if user_signed_in? %>
-          <li class="nav-item d-grid d-sm-block">
-            <%= link_to "Dashboard", applications_path, class: "btn btn-info nav-link me-sm-2 mb-2 mb-sm-0" %>
-          </li>
-          <li class="nav-item">
-
+          <li class="nav-item me-3">
+            <%= link_to "Dashboard", applications_path, class: "btn px-4 py-2 rounded-3 fw-medium navbar-btn" %>
           </li>
           <li class="nav-item dropdown">
-            <a href="#" id="navbarDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <%= image_tag "https://www.creativefabrica.com/wp-content/uploads/2023/05/20/User-icon-Graphics-70077892-1.jpg", class: "avatar", alt: "dropdown menu" %>
+            <a href="#" id="navbarDropdown" class="nav-link dropdown-toggle d-flex align-items-center p-0" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <div class="d-flex align-items-center justify-content-center rounded-circle navbar-avatar">
+                <i class="bi bi-person-fill"></i>
+              </div>
             </a>
-            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-
-              <%= link_to "Log out", destroy_user_session_path, data: {turbo_method: :delete}, class: "dropdown-item" %>
+            <div class="dropdown-menu dropdown-menu-end border-0 shadow-lg navbar-dropdown" aria-labelledby="navbarDropdown">
+              <%= link_to "Log out", destroy_user_session_path, data: {turbo_method: :delete}, class: "dropdown-item py-2 px-3 navbar-dropdown-item" %>
             </div>
           </li>
         <% else %>
           <li class="nav-item">
-            <%= link_to "Login", new_user_session_path, class: "nav-link" %>
+            <%= link_to "Login", new_user_session_path, class: "btn px-4 py-2 rounded-3 fw-medium navbar-btn" %>
           </li>
         <% end %>
       </ul>
     </div>
   </div>
-</div>
+</nav>
