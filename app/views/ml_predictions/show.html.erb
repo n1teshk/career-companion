@@ -1,0 +1,234 @@
+<% content_for :title, "ML Career Predictions" %>
+
+<div class="container-fluid py-4">
+  <div class="row">
+    <div class="col-12">
+      <!-- Header Section -->
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <h2 class="text-primary mb-1">🧠 ML Career Predictions</h2>
+          <p class="text-muted mb-0">AI-powered insights for: <strong><%= @application.title %></strong></p>
+        </div>
+        
+        <div class="d-flex gap-2">
+          <%= link_to application_path(@application), class: "btn btn-outline-secondary" do %>
+            <i class="bi bi-arrow-left me-1"></i> Back to Application
+          <% end %>
+          
+          <% if ApplicationConfig.ml_predictions_enabled? %>
+            <%= form_with url: generate_application_ml_prediction_path(@application), method: :post, 
+                         class: "d-inline", data: { turbo_method: :post } do |form| %>
+              <%= form.submit "Generate New Predictions", 
+                             class: "btn btn-primary",
+                             data: { 
+                               confirm: "This will generate new ML predictions. Continue?",
+                               disable_with: "Generating..."
+                             } %>
+            <% end %>
+          <% else %>
+            <span class="badge bg-warning">ML Predictions Currently Unavailable</span>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- Prediction Summary Cards -->
+      <% if @latest_predictions.any? %>
+        <div class="row mb-4">
+          <div class="col-md-3">
+            <div class="card bg-light">
+              <div class="card-body text-center">
+                <h5 class="card-title text-primary">Total Predictions</h5>
+                <h3 class="mb-0"><%= @prediction_summary[:total_predictions] %></h3>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card bg-light">
+              <div class="card-body text-center">
+                <h5 class="card-title text-success">High Confidence</h5>
+                <h3 class="mb-0"><%= @prediction_summary[:high_confidence_count] %></h3>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card bg-light">
+              <div class="card-body text-center">
+                <h5 class="card-title text-info">Avg Confidence</h5>
+                <h3 class="mb-0"><%= (@prediction_summary[:average_confidence] * 100).round %>%</h3>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card bg-light">
+              <div class="card-body text-center">
+                <h5 class="card-title text-secondary">Last Updated</h5>
+                <p class="mb-0 small"><%= time_ago_in_words(@prediction_summary[:last_generated]) %> ago</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Success Probability Section -->
+        <% if @latest_predictions['success_probability'] %>
+          <div class="card mb-4">
+            <div class="card-header d-flex align-items-center">
+              <h5 class="mb-0">🎯 Success Probability Prediction</h5>
+              <span class="badge bg-<%= confidence_badge_color(@latest_predictions['success_probability']) %> ms-auto">
+                <%= @latest_predictions['success_probability'].confidence_level %> Confidence
+              </span>
+            </div>
+            <div class="card-body">
+              <%= render 'success_probability_results', prediction: @latest_predictions['success_probability'] %>
+            </div>
+          </div>
+        <% end %>
+
+        <!-- Salary Range Section -->
+        <% if @latest_predictions['salary_range'] %>
+          <div class="card mb-4">
+            <div class="card-header d-flex align-items-center">
+              <h5 class="mb-0">💰 Salary Range Prediction</h5>
+              <span class="badge bg-<%= confidence_badge_color(@latest_predictions['salary_range']) %> ms-auto">
+                <%= @latest_predictions['salary_range'].confidence_level %> Confidence
+              </span>
+            </div>
+            <div class="card-body">
+              <%= render 'salary_range_results', prediction: @latest_predictions['salary_range'] %>
+            </div>
+          </div>
+        <% end %>
+
+        <!-- Career Paths Section -->
+        <% if @latest_predictions['career_path'] %>
+          <div class="card mb-4">
+            <div class="card-header d-flex align-items-center">
+              <h5 class="mb-0">🚀 Career Path Recommendations</h5>
+              <span class="badge bg-<%= confidence_badge_color(@latest_predictions['career_path']) %> ms-auto">
+                <%= @latest_predictions['career_path'].confidence_level %> Confidence
+              </span>
+            </div>
+            <div class="card-body">
+              <%= render 'career_paths_results', prediction: @latest_predictions['career_path'] %>
+            </div>
+          </div>
+        <% end %>
+
+        <!-- Recent Predictions History -->
+        <div class="card">
+          <div class="card-header">
+            <h5 class="mb-0">📊 Recent Predictions History</h5>
+          </div>
+          <div class="card-body">
+            <% if @ml_predictions.any? %>
+              <div class="table-responsive">
+                <table class="table table-sm">
+                  <thead>
+                    <tr>
+                      <th>Type</th>
+                      <th>Confidence</th>
+                      <th>Status</th>
+                      <th>Generated</th>
+                      <th>Processing Time</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% @ml_predictions.each do |prediction| %>
+                      <tr>
+                        <td>
+                          <span class="badge bg-secondary">
+                            <%= prediction.prediction_type.humanize %>
+                          </span>
+                        </td>
+                        <td>
+                          <% if prediction.confidence_score %>
+                            <div class="d-flex align-items-center">
+                              <div class="progress me-2" style="width: 60px; height: 8px;">
+                                <div class="progress-bar bg-<%= confidence_badge_color(prediction) %>" 
+                                     style="width: <%= (prediction.confidence_score * 100).round %>%"></div>
+                              </div>
+                              <small><%= (prediction.confidence_score * 100).round %>%</small>
+                            </div>
+                          <% else %>
+                            <span class="text-muted">-</span>
+                          <% end %>
+                        </td>
+                        <td>
+                          <span class="badge bg-<%= status_badge_color(prediction.status) %>">
+                            <%= prediction.status.humanize %>
+                          </span>
+                        </td>
+                        <td>
+                          <small class="text-muted">
+                            <%= time_ago_in_words(prediction.created_at) %> ago
+                          </small>
+                        </td>
+                        <td>
+                          <% if prediction.processing_time_seconds %>
+                            <small class="text-muted">
+                              <%= prediction.processing_time_seconds.round(2) %>s
+                            </small>
+                          <% else %>
+                            <span class="text-muted">-</span>
+                          <% end %>
+                        </td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+                </table>
+              </div>
+            <% else %>
+              <div class="text-center py-4">
+                <div class="mb-3">
+                  <i class="bi bi-graph-up fs-1 text-muted"></i>
+                </div>
+                <h5 class="text-muted">No predictions generated yet</h5>
+                <p class="text-muted">Click "Generate New Predictions" to get AI-powered insights about this application.</p>
+              </div>
+            <% end %>
+          </div>
+        </div>
+
+      <% else %>
+        <!-- No Predictions State -->
+        <div class="card">
+          <div class="card-body text-center py-5">
+            <div class="mb-4">
+              <i class="bi bi-robot fs-1 text-muted"></i>
+            </div>
+            <h4 class="text-muted mb-3">No ML Predictions Available</h4>
+            <p class="text-muted mb-4">
+              Generate AI-powered predictions to get insights about your application success probability,
+              expected salary range, and recommended career paths.
+            </p>
+            
+            <% if ApplicationConfig.ml_predictions_enabled? %>
+              <%= form_with url: generate_application_ml_prediction_path(@application), method: :post, 
+                           class: "d-inline" do |form| %>
+                <%= form.submit "Generate ML Predictions", 
+                               class: "btn btn-primary btn-lg",
+                               data: { 
+                                 disable_with: "Generating predictions..."
+                               } %>
+              <% end %>
+            <% else %>
+              <div class="alert alert-warning">
+                <i class="bi bi-exclamation-triangle me-2"></i>
+                ML predictions are currently unavailable. Please check back later.
+              </div>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<!-- Auto-refresh for processing predictions -->
+<% if @ml_predictions.where(status: 'processing').any? %>
+  <script>
+    // Auto-refresh page if predictions are processing
+    setTimeout(function() {
+      window.location.reload();
+    }, <%= ApplicationConfig.ui_auto_refresh_interval_ms %>);
+  </script>
+<% end %>

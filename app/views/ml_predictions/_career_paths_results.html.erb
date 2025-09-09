@@ -1,0 +1,178 @@
+<% formatted_results = prediction.formatted_results %>
+<% career_paths = prediction.career_paths %>
+
+<div class="row">
+  <div class="col-12">
+    <!-- Career Paths Overview -->
+    <% if career_paths&.any? %>
+      <div class="row g-3 mb-4">
+        <% career_paths.first(3).each_with_index do |path, index| %>
+          <div class="col-md-4">
+            <div class="card h-100 border-<%= index == 0 ? 'primary' : 'light' %>">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                  <h6 class="card-title mb-0"><%= path['title'] %></h6>
+                  <% if index == 0 %>
+                    <span class="badge bg-primary">Recommended</span>
+                  <% end %>
+                </div>
+                
+                <div class="mb-2">
+                  <small class="text-muted d-block">Success Probability</small>
+                  <div class="d-flex align-items-center">
+                    <div class="progress me-2" style="width: 80px; height: 6px;">
+                      <div class="progress-bar bg-<%= career_path_color(path['probability']) %>" 
+                           style="width: <%= (path['probability'] * 100).round %>%"></div>
+                    </div>
+                    <small class="text-muted"><%= (path['probability'] * 100).round %>%</small>
+                  </div>
+                </div>
+                
+                <div class="mb-2">
+                  <small class="text-muted">Timeline: </small>
+                  <span class="badge bg-light text-dark"><%= path['timeline'] %></span>
+                </div>
+                
+                <div class="mb-3">
+                  <small class="text-muted">Path Type: </small>
+                  <span class="badge bg-outline-secondary">
+                    <%= path['path_type']&.humanize || 'Career Growth' %>
+                  </span>
+                </div>
+                
+                <!-- Requirements -->
+                <% if path['requirements']&.any? %>
+                  <div class="mb-3">
+                    <small class="text-primary d-block mb-1">Key Requirements:</small>
+                    <ul class="list-unstyled mb-0">
+                      <% path['requirements'].first(2).each do |requirement| %>
+                        <li class="small text-muted">
+                          <i class="bi bi-check2 text-success me-1"></i>
+                          <%= requirement %>
+                        </li>
+                      <% end %>
+                    </ul>
+                  </div>
+                <% end %>
+                
+                <!-- Salary Increase -->
+                <% if path['salary_increase'] %>
+                  <div class="text-center">
+                    <small class="text-muted d-block">Potential Salary Increase</small>
+                    <strong class="text-success"><%= path['salary_increase'] %></strong>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+
+      <!-- Skills Recommendations -->
+      <% if formatted_results[:recommended_skills]&.any? %>
+        <div class="mb-4">
+          <h6 class="text-primary mb-3">🎯 Recommended Skills to Develop</h6>
+          <div class="d-flex flex-wrap gap-2">
+            <% formatted_results[:recommended_skills].each do |skill| %>
+              <span class="badge bg-light text-dark border">
+                <i class="bi bi-plus-circle me-1"></i>
+                <%= skill %>
+              </span>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+
+      <!-- Career Timeline -->
+      <% if formatted_results[:timeline] %>
+        <div class="mb-4">
+          <h6 class="text-primary mb-3">⏱️ Career Development Timeline</h6>
+          <div class="row g-3">
+            <div class="col-md-4">
+              <div class="bg-light rounded p-3 text-center">
+                <h4 class="text-primary mb-1"><%= formatted_results[:timeline][:short_term] || 0 %></h4>
+                <small class="text-muted">Short-term opportunities<br>(<%= ApplicationConfig.career_timeline_short_term %>)</small>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="bg-light rounded p-3 text-center">
+                <h4 class="text-info mb-1"><%= formatted_results[:timeline][:medium_term] || 0 %></h4>
+                <small class="text-muted">Medium-term paths<br>(<%= ApplicationConfig.career_timeline_medium_term %>)</small>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="bg-light rounded p-3 text-center">
+                <h4 class="text-warning mb-1"><%= formatted_results[:timeline][:long_term] || 0 %></h4>
+                <small class="text-muted">Long-term goals<br>(<%= ApplicationConfig.career_timeline_long_term %>)</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+
+      <!-- Growth Opportunities -->
+      <% if formatted_results[:growth_opportunities]&.any? %>
+        <div class="mt-4">
+          <h6 class="text-primary mb-3">📈 Growth Opportunities</h6>
+          <div class="table-responsive">
+            <table class="table table-sm">
+              <thead>
+                <tr>
+                  <th>Path Type</th>
+                  <th>Growth Potential</th>
+                  <th>Timeline</th>
+                  <th>Difficulty</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% formatted_results[:growth_opportunities].each do |opportunity| %>
+                  <tr>
+                    <td>
+                      <span class="badge bg-secondary">
+                        <%= opportunity[:path_type]&.humanize %>
+                      </span>
+                    </td>
+                    <td>
+                      <span class="text-success">
+                        <i class="bi bi-arrow-up me-1"></i>
+                        <%= opportunity[:growth_potential] %>
+                      </span>
+                    </td>
+                    <td>
+                      <small class="text-muted"><%= opportunity[:timeline] %></small>
+                    </td>
+                    <td>
+                      <span class="badge bg-<%= difficulty_badge_color(opportunity[:difficulty]) %>">
+                        <%= opportunity[:difficulty] %>
+                      </span>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      <% end %>
+
+    <% else %>
+      <!-- No Career Paths Available -->
+      <div class="text-center py-4">
+        <i class="bi bi-map fs-1 text-muted mb-3"></i>
+        <h5 class="text-muted">Career paths analysis in progress...</h5>
+        <p class="text-muted">We're analyzing your profile to generate personalized career recommendations.</p>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<!-- Confidence Level -->
+<div class="mt-3">
+  <small class="text-muted d-block">Prediction Confidence</small>
+  <div class="d-flex align-items-center">
+    <div class="progress me-2" style="width: 150px; height: 8px;">
+      <div class="progress-bar bg-<%= confidence_badge_color(prediction) %>" 
+           style="width: <%= (prediction.confidence_score * 100).round %>%"></div>
+    </div>
+    <small class="text-muted"><%= (prediction.confidence_score * 100).round %>%</small>
+  </div>
+</div>

@@ -17,16 +17,28 @@
       <ul class="navbar-nav ms-auto align-items-lg-center">
         <% if user_signed_in? %>
           <li class="nav-item">
-            <%= link_to "Features", root_path(anchor: "features"), class: "nav-link fw-medium me-3" %>
+            <%= link_to "Dashboard", applications_path, class: "nav-link fw-medium me-3" %>
           </li>
-          <li class="nav-item">
-            <%= link_to "How It Works", root_path(anchor: "how-it-works"), class: "nav-link fw-medium me-3" %>
-          </li>
-          <li class="nav-item">
-            <%= link_to "Testimonials", root_path(anchor: "testimonials"), class: "nav-link fw-medium me-3" %>
+          <li class="nav-item dropdown">
+            <a href="#" id="toolsDropdown" class="nav-link dropdown-toggle fw-medium me-3" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              AI Tools
+            </a>
+            <div class="dropdown-menu border-0 shadow-lg navbar-dropdown" aria-labelledby="toolsDropdown">
+              <%= link_to new_linkedin_analysis_path, class: "dropdown-item py-2 px-3 navbar-dropdown-item" do %>
+                <i class="bi bi-linkedin me-2"></i>
+                LinkedIn Analysis
+              <% end %>
+              <div class="dropdown-divider"></div>
+              <h6 class="dropdown-header small text-muted">For Applications</h6>
+              <a href="#" class="dropdown-item py-2 px-3 navbar-dropdown-item text-muted disabled">
+                <i class="bi bi-graph-up me-2"></i>
+                ML Predictions
+                <small class="ms-1">(via app)</small>
+              </a>
+            </div>
           </li>
           <li class="nav-item me-3">
-            <%= link_to "Dashboard", applications_path, class: "btn px-4 py-2 rounded-3 fw-medium navbar-btn" %>
+            <%= link_to "Get Started", applications_path, class: "btn px-4 py-2 rounded-3 fw-medium navbar-btn" %>
           </li>
           <li class="nav-item dropdown">
             <a href="#" id="navbarDropdown" class="nav-link dropdown-toggle d-flex align-items-center p-0" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

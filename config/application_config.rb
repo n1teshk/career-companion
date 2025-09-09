@@ -51,6 +51,10 @@ class ApplicationConfig
       10.megabytes
     end
 
+    def max_pdf_size_mb
+      10
+    end
+
     def allowed_file_types
       %w[pdf doc docx txt].freeze
     end
@@ -108,6 +112,67 @@ class ApplicationConfig
 
     def cache_expiry_long
       24.hours
+    end
+
+    # LinkedIn Analysis Configuration
+    def linkedin_analysis_cache_days
+      7
+    end
+
+    def linkedin_analysis_rate_limit
+      {
+        requests_per_hour: 10,
+        requests_per_day: 50
+      }.freeze
+    end
+
+    def ml_prediction_rate_limit
+      {
+        requests_per_hour: 5,
+        requests_per_day: 20
+      }.freeze
+    end
+
+    # UI Configuration  
+    def ui_animation_duration_ms
+      2000
+    end
+
+    def ui_polling_interval_ms
+      5000
+    end
+
+    def ui_auto_refresh_interval_ms
+      10000
+    end
+
+    def circular_progress_radius
+      54
+    end
+
+    def circular_progress_large_radius
+      65
+    end
+
+    def file_upload_min_height_px
+      200
+    end
+
+    # Timeline Configuration
+    def career_timeline_short_term
+      "1-2 years"
+    end
+
+    def career_timeline_medium_term
+      "3-5 years"
+    end
+
+    def career_timeline_long_term
+      "5+ years"
+    end
+
+    def improvement_timeline_estimate
+      "3-4 weeks"
     end
 
     def job_queue_priorities

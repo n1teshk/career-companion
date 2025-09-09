@@ -1,0 +1,325 @@
+<% content_for :title, "LinkedIn Profile Analysis" %>
+
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <!-- Header Section -->
+      <div class="text-center mb-5">
+        <h2 class="text-primary mb-3">📄 LinkedIn Profile Analysis</h2>
+        <p class="lead text-muted">
+          Upload your LinkedIn profile PDF to get AI-powered insights and improvement recommendations
+        </p>
+        <div class="text-muted small">
+          <i class="bi bi-shield-check text-success me-1"></i>
+          Your data is processed securely and not stored permanently
+        </div>
+      </div>
+
+      <!-- Upload Form Card -->
+      <div class="card shadow-sm">
+        <div class="card-body p-4">
+          <%= form_with url: linkedin_analyses_path, method: :post, multipart: true, 
+                       class: "needs-validation", 
+                       data: { turbo: false }, 
+                       novalidate: true do |form| %>
+            
+            <!-- File Upload Section -->
+            <div class="mb-4">
+              <label for="linkedin_profile" class="form-label h5 text-primary">
+                <i class="bi bi-cloud-upload me-2"></i>
+                Select LinkedIn Profile PDF
+              </label>
+              
+              <div class="file-upload-area border-dashed rounded p-4 text-center" 
+                   ondrop="dropHandler(event);" 
+                   ondragover="dragOverHandler(event);"
+                   ondragenter="dragEnterHandler(event);"
+                   ondragleave="dragLeaveHandler(event);">
+                
+                <%= form.file_field :linkedin_profile, 
+                                   class: "form-control d-none", 
+                                   id: "linkedin_profile",
+                                   accept: ".pdf",
+                                   required: true,
+                                   onchange: "handleFileSelect(this)" %>
+                
+                <div class="upload-placeholder">
+                  <i class="bi bi-file-pdf fs-1 text-muted mb-3"></i>
+                  <h5 class="text-muted">Drag & drop your LinkedIn PDF here</h5>
+                  <p class="text-muted mb-3">or</p>
+                  <button type="button" class="btn btn-outline-primary" onclick="document.getElementById('linkedin_profile').click()">
+                    <i class="bi bi-folder2-open me-1"></i>
+                    Browse Files
+                  </button>
+                </div>
+                
+                <div class="upload-success d-none">
+                  <i class="bi bi-file-pdf-fill fs-1 text-primary mb-3"></i>
+                  <h5 class="text-primary">File Selected</h5>
+                  <p class="text-muted mb-0" id="file-name"></p>
+                  <button type="button" class="btn btn-sm btn-outline-secondary mt-2" onclick="clearFile()">
+                    <i class="bi bi-x me-1"></i>
+                    Choose Different File
+                  </button>
+                </div>
+              </div>
+              
+              <div class="invalid-feedback">
+                Please select a LinkedIn profile PDF file.
+              </div>
+              
+              <small class="form-text text-muted mt-2">
+                <i class="bi bi-info-circle me-1"></i>
+                Supported format: PDF only. Maximum file size: <%= ApplicationConfig.max_pdf_size_mb %>MB
+              </small>
+            </div>
+
+            <!-- How to Get Your LinkedIn PDF -->
+            <div class="mb-4">
+              <h6 class="text-primary mb-3">
+                <i class="bi bi-question-circle me-2"></i>
+                How to get your LinkedIn profile PDF
+              </h6>
+              
+              <div class="row g-3">
+                <div class="col-md-4">
+                  <div class="bg-light rounded p-3 h-100">
+                    <div class="text-center mb-2">
+                      <span class="badge bg-primary rounded-pill">1</span>
+                    </div>
+                    <p class="small mb-0">
+                      Go to your LinkedIn profile page and click "More" button
+                    </p>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="bg-light rounded p-3 h-100">
+                    <div class="text-center mb-2">
+                      <span class="badge bg-primary rounded-pill">2</span>
+                    </div>
+                    <p class="small mb-0">
+                      Select "Save to PDF" from the dropdown menu
+                    </p>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="bg-light rounded p-3 h-100">
+                    <div class="text-center mb-2">
+                      <span class="badge bg-primary rounded-pill">3</span>
+                    </div>
+                    <p class="small mb-0">
+                      Download the PDF and upload it here for analysis
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- What You'll Get -->
+            <div class="mb-4">
+              <h6 class="text-primary mb-3">
+                <i class="bi bi-graph-up me-2"></i>
+                What you'll get from the analysis
+              </h6>
+              
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <div class="d-flex align-items-start">
+                    <i class="bi bi-check-circle-fill text-success me-2 mt-1"></i>
+                    <div>
+                      <strong class="d-block">Profile Score</strong>
+                      <small class="text-muted">Overall profile completeness and quality rating</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="d-flex align-items-start">
+                    <i class="bi bi-check-circle-fill text-success me-2 mt-1"></i>
+                    <div>
+                      <strong class="d-block">Improvement Recommendations</strong>
+                      <small class="text-muted">Specific suggestions to enhance your profile</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="d-flex align-items-start">
+                    <i class="bi bi-check-circle-fill text-success me-2 mt-1"></i>
+                    <div>
+                      <strong class="d-block">Keyword Optimization</strong>
+                      <small class="text-muted">Industry-specific keywords to improve discoverability</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="d-flex align-items-start">
+                    <i class="bi bi-check-circle-fill text-success me-2 mt-1"></i>
+                    <div>
+                      <strong class="d-block">Timeline Planning</strong>
+                      <small class="text-muted">Structured improvement plan with priorities</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Privacy Notice -->
+            <div class="alert alert-info mb-4">
+              <h6 class="alert-heading">
+                <i class="bi bi-shield-lock me-1"></i>
+                Privacy & Security
+              </h6>
+              <ul class="mb-0 small">
+                <li>Your PDF is processed securely and temporarily</li>
+                <li>Analysis data is cached for <%= ApplicationConfig.linkedin_analysis_cache_days %> days then automatically deleted</li>
+                <li>We do not store your LinkedIn profile permanently</li>
+                <li>No data is shared with third parties</li>
+              </ul>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="text-center">
+              <%= form.submit "Analyze My LinkedIn Profile", 
+                             class: "btn btn-primary btn-lg px-5",
+                             id: "submit-btn",
+                             data: { 
+                               disable_with: '<i class="bi bi-hourglass-split me-2"></i>Analyzing Profile...',
+                               bs_toggle: "tooltip",
+                               bs_title: "Upload a PDF file first"
+                             },
+                             disabled: true %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- Rate Limit Info -->
+      <div class="text-center mt-4">
+        <small class="text-muted">
+          <i class="bi bi-info-circle me-1"></i>
+          Rate limit: <%= ApplicationConfig.linkedin_analysis_rate_limit[:requests_per_hour] %> analyses per hour
+        </small>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.border-dashed {
+  border: 2px dashed #dee2e6 !important;
+  transition: all 0.3s ease;
+}
+
+.file-upload-area.drag-over {
+  border-color: #0d6efd !important;
+  background-color: rgba(13, 110, 253, 0.1);
+}
+
+.file-upload-area {
+  cursor: pointer;
+  min-height: <%= ApplicationConfig.file_upload_min_height_px %>px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.file-upload-area:hover {
+  border-color: #0d6efd;
+  background-color: rgba(13, 110, 253, 0.05);
+}
+</style>
+
+<script>
+// File drag and drop handlers
+function dragOverHandler(ev) {
+  ev.preventDefault();
+  ev.currentTarget.classList.add('drag-over');
+}
+
+function dragEnterHandler(ev) {
+  ev.preventDefault();
+  ev.currentTarget.classList.add('drag-over');
+}
+
+function dragLeaveHandler(ev) {
+  ev.currentTarget.classList.remove('drag-over');
+}
+
+function dropHandler(ev) {
+  ev.preventDefault();
+  ev.currentTarget.classList.remove('drag-over');
+  
+  const files = ev.dataTransfer.files;
+  if (files.length > 0) {
+    const file = files[0];
+    if (file.type === 'application/pdf') {
+      document.getElementById('linkedin_profile').files = files;
+      handleFileSelect(document.getElementById('linkedin_profile'));
+    } else {
+      alert('Please upload a PDF file only.');
+    }
+  }
+}
+
+// File selection handler
+function handleFileSelect(input) {
+  const file = input.files[0];
+  const uploadArea = document.querySelector('.file-upload-area');
+  const placeholder = uploadArea.querySelector('.upload-placeholder');
+  const success = uploadArea.querySelector('.upload-success');
+  const submitBtn = document.getElementById('submit-btn');
+  
+  if (file) {
+    // Check file size
+    const maxSize = <%= ApplicationConfig.max_pdf_size_mb %> * 1024 * 1024; // Convert to bytes
+    if (file.size > maxSize) {
+      alert('File size too large. Maximum <%= ApplicationConfig.max_pdf_size_mb %>MB allowed.');
+      clearFile();
+      return;
+    }
+    
+    // Check file type
+    if (file.type !== 'application/pdf') {
+      alert('Please upload a PDF file only.');
+      clearFile();
+      return;
+    }
+    
+    // Show success state
+    document.getElementById('file-name').textContent = file.name + ' (' + formatFileSize(file.size) + ')';
+    placeholder.classList.add('d-none');
+    success.classList.remove('d-none');
+    submitBtn.disabled = false;
+    submitBtn.setAttribute('data-bs-title', 'Click to analyze your LinkedIn profile');
+  }
+}
+
+function clearFile() {
+  const input = document.getElementById('linkedin_profile');
+  const uploadArea = document.querySelector('.file-upload-area');
+  const placeholder = uploadArea.querySelector('.upload-placeholder');
+  const success = uploadArea.querySelector('.upload-success');
+  const submitBtn = document.getElementById('submit-btn');
+  
+  input.value = '';
+  placeholder.classList.remove('d-none');
+  success.classList.add('d-none');
+  submitBtn.disabled = true;
+  submitBtn.setAttribute('data-bs-title', 'Upload a PDF file first');
+}
+
+function formatFileSize(bytes) {
+  if (bytes === 0) return '0 Bytes';
+  const k = 1024;
+  const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+}
+
+// Initialize tooltips
+document.addEventListener('DOMContentLoaded', function() {
+  const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+  const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+    return new bootstrap.Tooltip(tooltipTriggerEl);
+  });
+});
+</script>
