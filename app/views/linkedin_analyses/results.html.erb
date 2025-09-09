@@ -1,0 +1,253 @@
+<% content_for :title, "LinkedIn Profile Analysis Results" %>
+
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-10">
+      <!-- Header Section -->
+      <div class="text-center mb-5">
+        <h2 class="text-primary mb-3">📊 LinkedIn Profile Analysis Results</h2>
+        <p class="lead text-muted">
+          Your comprehensive profile assessment and improvement recommendations
+        </p>
+      </div>
+
+      <% if @analysis_result %>
+        <!-- Profile Score Section -->
+        <div class="row mb-4">
+          <div class="col-md-6 mx-auto">
+            <div class="card border-primary">
+              <div class="card-body text-center py-4">
+                <div class="mb-3">
+                  <div class="circular-progress-lg" 
+                       data-percentage="<%= @analysis_result[:profile_score] %>"
+                       data-progress-radius="<%= ApplicationConfig.circular_progress_large_radius %>">
+                    <svg width="150" height="150" class="circular-chart">
+                      <circle cx="75" cy="75" r="<%= ApplicationConfig.circular_progress_large_radius %>" fill="transparent" 
+                              stroke="#e9ecef" stroke-width="10"/>
+                      <circle cx="75" cy="75" r="<%= ApplicationConfig.circular_progress_large_radius %>" fill="transparent" 
+                              stroke="<%= profile_score_color(@analysis_result[:profile_score]) %>" 
+                              stroke-width="10"
+                              stroke-dasharray="<%= (@analysis_result[:profile_score] * (2 * Math::PI * ApplicationConfig.circular_progress_large_radius / 100)).round(2) %>, <%= (2 * Math::PI * ApplicationConfig.circular_progress_large_radius).round(2) %>"
+                              stroke-linecap="round"
+                              transform="rotate(-90 75 75)"/>
+                    </svg>
+                    <div class="circular-progress-value-lg">
+                      <h2 class="mb-0 text-<%= profile_score_text_color(@analysis_result[:profile_score]) %>">
+                        <%= @analysis_result[:profile_score] %>/100
+                      </h2>
+                      <small class="text-muted">Profile Score</small>
+                    </div>
+                  </div>
+                </div>
+                <h4 class="text-<%= profile_score_text_color(@analysis_result[:profile_score]) %> mb-2">
+                  <%= profile_score_level(@analysis_result[:profile_score]) %> Profile
+                </h4>
+                <p class="text-muted mb-0">
+                  Based on LinkedIn best practices and industry standards
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Analysis Overview -->
+        <% if @analysis_result[:analysis] %>
+          <div class="card mb-4">
+            <div class="card-header">
+              <h5 class="mb-0">🔍 Profile Analysis Overview</h5>
+            </div>
+            <div class="card-body">
+              <p class="mb-0"><%= simple_format(@analysis_result[:analysis]) %></p>
+            </div>
+          </div>
+        <% end %>
+
+        <!-- Key Recommendations -->
+        <% if @analysis_result[:recommendations]&.any? %>
+          <div class="card mb-4">
+            <div class="card-header">
+              <h5 class="mb-0">💡 Key Improvement Recommendations</h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <% @analysis_result[:recommendations].each_with_index do |recommendation, index| %>
+                  <div class="col-md-6 mb-3">
+                    <div class="d-flex align-items-start">
+                      <span class="badge bg-primary rounded-pill me-3 mt-1" style="min-width: 24px;">
+                        <%= index + 1 %>
+                      </span>
+                      <div>
+                        <h6 class="mb-1"><%= recommendation[:title] || "Recommendation #{index + 1}" %></h6>
+                        <p class="text-muted small mb-0">
+                          <%= recommendation[:description] || recommendation %>
+                        </p>
+                        <% if recommendation[:impact] %>
+                          <div class="mt-1">
+                            <span class="badge bg-light text-dark">
+                              Impact: <%= recommendation[:impact] %>
+                            </span>
+                          </div>
+                        <% end %>
+                      </div>
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+
+        <!-- Detailed Action Items -->
+        <% if @analysis_result[:summary]&.dig(:action_items)&.any? %>
+          <div class="card mb-4">
+            <div class="card-header">
+              <h5 class="mb-0">✅ Immediate Action Items</h5>
+            </div>
+            <div class="card-body">
+              <div class="row g-3">
+                <% @analysis_result[:summary][:action_items].each do |item| %>
+                  <div class="col-md-4">
+                    <div class="border rounded p-3 h-100">
+                      <div class="d-flex align-items-start">
+                        <i class="bi bi-check-circle text-success me-2 mt-1"></i>
+                        <div>
+                          <h6 class="mb-1"><%= item[:category] || "Action Item" %></h6>
+                          <p class="small text-muted mb-2"><%= item[:description] || item %></p>
+                          <% if item[:priority] %>
+                            <span class="badge bg-<%= priority_badge_color(item[:priority]) %>">
+                              <%= item[:priority] %> Priority
+                            </span>
+                          <% end %>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+
+        <!-- Skills & Keywords -->
+        <% if @analysis_result[:summary]&.dig(:missing_skills)&.any? %>
+          <div class="card mb-4">
+            <div class="card-header">
+              <h5 class="mb-0">🎯 Skills & Keywords to Add</h5>
+            </div>
+            <div class="card-body">
+              <div class="d-flex flex-wrap gap-2">
+                <% @analysis_result[:summary][:missing_skills].each do |skill| %>
+                  <span class="badge bg-light text-dark border">
+                    <i class="bi bi-plus-circle me-1"></i>
+                    <%= skill %>
+                  </span>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+
+        <!-- Profile Sections Analysis -->
+        <% if @analysis_result[:summary]&.dig(:section_scores) %>
+          <div class="card mb-4">
+            <div class="card-header">
+              <h5 class="mb-0">📋 Section-by-Section Analysis</h5>
+            </div>
+            <div class="card-body">
+              <div class="row g-3">
+                <% @analysis_result[:summary][:section_scores].each do |section, score| %>
+                  <div class="col-md-6">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                      <span class="fw-medium"><%= section.to_s.humanize %></span>
+                      <span class="text-<%= section_score_color(score) %>"><%= score %>/10</span>
+                    </div>
+                    <div class="progress" style="height: 6px;">
+                      <div class="progress-bar bg-<%= section_score_color(score) %>" 
+                           style="width: <%= (score * 10) %>%"></div>
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+
+        <!-- Get Detailed Report Button -->
+        <div class="text-center mb-4">
+          <%= link_to improvement_report_linkedin_analyses_path, 
+                      class: "btn btn-primary btn-lg me-3" do %>
+            <i class="bi bi-file-text me-2"></i>
+            Get Detailed Improvement Report
+          <% end %>
+          
+          <%= link_to new_linkedin_analysis_path, 
+                      class: "btn btn-outline-secondary btn-lg" do %>
+            <i class="bi bi-arrow-clockwise me-2"></i>
+            Analyze Another Profile
+          <% end %>
+        </div>
+
+      <% else %>
+        <!-- No Results State -->
+        <div class="card">
+          <div class="card-body text-center py-5">
+            <div class="mb-4">
+              <i class="bi bi-exclamation-circle fs-1 text-muted"></i>
+            </div>
+            <h4 class="text-muted mb-3">No Analysis Results Found</h4>
+            <p class="text-muted mb-4">
+              Your LinkedIn profile analysis results may have expired or are not available.
+            </p>
+            
+            <%= link_to new_linkedin_analysis_path, 
+                        class: "btn btn-primary btn-lg" do %>
+              <i class="bi bi-upload me-2"></i>
+              Start New Analysis
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+
+      <!-- Analysis Info -->
+      <div class="text-center mt-4">
+        <small class="text-muted">
+          <i class="bi bi-info-circle me-1"></i>
+          Analysis results are cached for <%= ApplicationConfig.linkedin_analysis_cache_days %> days for your privacy and security.
+          <% if @analysis_result&.dig(:analyzed_at) %>
+            Last analyzed: <%= time_ago_in_words(@analysis_result[:analyzed_at]) %> ago
+          <% end %>
+        </small>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.circular-progress-lg {
+  position: relative;
+  display: inline-block;
+}
+
+.circular-progress-value-lg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.circular-chart {
+  transform: rotate(-90deg);
+}
+
+.badge-priority-high { 
+  background-color: #dc3545; 
+}
+.badge-priority-medium { 
+  background-color: #ffc107; 
+  color: #000; 
+}
+.badge-priority-low { 
+  background-color: #28a745; 
+}
+</style>

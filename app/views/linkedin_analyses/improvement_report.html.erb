@@ -1,0 +1,359 @@
+<% content_for :title, "LinkedIn Improvement Report" %>
+
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-10">
+      <!-- Header Section -->
+      <div class="text-center mb-5">
+        <h2 class="text-primary mb-3">📈 Detailed Improvement Report</h2>
+        <p class="lead text-muted">
+          Comprehensive action plan to optimize your LinkedIn profile
+        </p>
+      </div>
+
+      <% if @analysis_result %>
+        <!-- Executive Summary -->
+        <div class="card mb-4 border-primary">
+          <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">🎯 Executive Summary</h5>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-3 text-center">
+                <h3 class="text-primary mb-1"><%= @analysis_result[:profile_score] %>/100</h3>
+                <small class="text-muted">Current Score</small>
+              </div>
+              <div class="col-md-3 text-center">
+                <h3 class="text-success mb-1">+<%= [30 - (@analysis_result[:profile_score] - 70), 0].max %></h3>
+                <small class="text-muted">Potential Improvement</small>
+              </div>
+              <div class="col-md-3 text-center">
+                <h3 class="text-info mb-1"><%= (@analysis_result[:recommendations]&.length || 0) %></h3>
+                <small class="text-muted">Recommendations</small>
+              </div>
+              <div class="col-md-3 text-center">
+                <h3 class="text-warning mb-1"><%= ApplicationConfig.improvement_timeline_estimate %></h3>
+                <small class="text-muted">Est. Timeline</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Priority Action Plan -->
+        <div class="card mb-4">
+          <div class="card-header">
+            <h5 class="mb-0">🚀 30-Day Action Plan</h5>
+          </div>
+          <div class="card-body">
+            <!-- Week 1 -->
+            <div class="mb-4">
+              <h6 class="text-primary mb-3">
+                <span class="badge bg-primary me-2">Week 1</span>
+                Foundation & Quick Wins
+              </h6>
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <div class="border-start border-primary border-3 ps-3">
+                    <h6 class="mb-1">Complete Profile Basics</h6>
+                    <ul class="list-unstyled mb-0 small">
+                      <li><i class="bi bi-check-circle me-1"></i> Professional headshot</li>
+                      <li><i class="bi bi-check-circle me-1"></i> Compelling headline</li>
+                      <li><i class="bi bi-check-circle me-1"></i> Complete About section</li>
+                      <li><i class="bi bi-check-circle me-1"></i> Add contact information</li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="border-start border-success border-3 ps-3">
+                    <h6 class="mb-1">Skills & Endorsements</h6>
+                    <ul class="list-unstyled mb-0 small">
+                      <li><i class="bi bi-check-circle me-1"></i> Add top 10 relevant skills</li>
+                      <li><i class="bi bi-check-circle me-1"></i> Request endorsements</li>
+                      <li><i class="bi bi-check-circle me-1"></i> Endorse connections</li>
+                      <li><i class="bi bi-check-circle me-1"></i> Take skill assessments</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Week 2 -->
+            <div class="mb-4">
+              <h6 class="text-info mb-3">
+                <span class="badge bg-info me-2">Week 2</span>
+                Content & Experience
+              </h6>
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <div class="border-start border-info border-3 ps-3">
+                    <h6 class="mb-1">Experience Section</h6>
+                    <ul class="list-unstyled mb-0 small">
+                      <li><i class="bi bi-check-circle me-1"></i> Add quantified achievements</li>
+                      <li><i class="bi bi-check-circle me-1"></i> Use industry keywords</li>
+                      <li><i class="bi bi-check-circle me-1"></i> Include relevant projects</li>
+                      <li><i class="bi bi-check-circle me-1"></i> Upload portfolio samples</li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="border-start border-warning border-3 ps-3">
+                    <h6 class="mb-1">Education & Certifications</h6>
+                    <ul class="list-unstyled mb-0 small">
+                      <li><i class="bi bi-check-circle me-1"></i> Add relevant coursework</li>
+                      <li><i class="bi bi-check-circle me-1"></i> Include certifications</li>
+                      <li><i class="bi bi-check-circle me-1"></i> List honors/awards</li>
+                      <li><i class="bi bi-check-circle me-1"></i> Add volunteer work</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Week 3-4 -->
+            <div class="mb-0">
+              <h6 class="text-secondary mb-3">
+                <span class="badge bg-secondary me-2">Week 3-4</span>
+                Engagement & Growth
+              </h6>
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <div class="border-start border-secondary border-3 ps-3">
+                    <h6 class="mb-1">Content Strategy</h6>
+                    <ul class="list-unstyled mb-0 small">
+                      <li><i class="bi bi-check-circle me-1"></i> Share industry insights</li>
+                      <li><i class="bi bi-check-circle me-1"></i> Comment on posts</li>
+                      <li><i class="bi bi-check-circle me-1"></i> Publish original content</li>
+                      <li><i class="bi bi-check-circle me-1"></i> Join relevant groups</li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="border-start border-dark border-3 ps-3">
+                    <h6 class="mb-1">Network Building</h6>
+                    <ul class="list-unstyled mb-0 small">
+                      <li><i class="bi bi-check-circle me-1"></i> Connect with colleagues</li>
+                      <li><i class="bi bi-check-circle me-1"></i> Follow industry leaders</li>
+                      <li><i class="bi bi-check-circle me-1"></i> Request recommendations</li>
+                      <li><i class="bi bi-check-circle me-1"></i> Attend virtual events</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Detailed Recommendations -->
+        <% if @analysis_result[:recommendations]&.any? %>
+          <div class="card mb-4">
+            <div class="card-header">
+              <h5 class="mb-0">📋 Detailed Recommendations</h5>
+            </div>
+            <div class="card-body">
+              <% @analysis_result[:recommendations].each_with_index do |recommendation, index| %>
+                <div class="<%= 'mb-4' unless index == @analysis_result[:recommendations].length - 1 %>">
+                  <div class="d-flex align-items-start">
+                    <span class="badge bg-primary rounded-pill me-3 mt-1" style="min-width: 30px;">
+                      <%= index + 1 %>
+                    </span>
+                    <div class="flex-grow-1">
+                      <h6 class="mb-2 text-primary">
+                        <%= recommendation[:title] || "Recommendation #{index + 1}" %>
+                      </h6>
+                      <p class="mb-2 text-muted">
+                        <%= recommendation[:description] || recommendation %>
+                      </p>
+                      
+                      <% if recommendation[:action_steps] %>
+                        <div class="mb-2">
+                          <small class="fw-bold text-secondary">Action Steps:</small>
+                          <ul class="small mb-0 mt-1">
+                            <% recommendation[:action_steps].each do |step| %>
+                              <li><%= step %></li>
+                            <% end %>
+                          </ul>
+                        </div>
+                      <% end %>
+                      
+                      <div class="d-flex gap-2 align-items-center">
+                        <% if recommendation[:impact] %>
+                          <span class="badge bg-success">
+                            <i class="bi bi-arrow-up me-1"></i>
+                            <%= recommendation[:impact] %> Impact
+                          </span>
+                        <% end %>
+                        <% if recommendation[:difficulty] %>
+                          <span class="badge bg-<%= difficulty_badge_color(recommendation[:difficulty]) %>">
+                            <%= recommendation[:difficulty] %> Difficulty
+                          </span>
+                        <% end %>
+                        <% if recommendation[:time_estimate] %>
+                          <span class="badge bg-light text-dark">
+                            <i class="bi bi-clock me-1"></i>
+                            <%= recommendation[:time_estimate] %>
+                          </span>
+                        <% end %>
+                      </div>
+                    </div>
+                  </div>
+                  <% unless index == @analysis_result[:recommendations].length - 1 %>
+                    <hr class="my-3">
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+
+        <!-- Industry-Specific Tips -->
+        <div class="card mb-4">
+          <div class="card-header">
+            <h5 class="mb-0">🎯 Industry-Specific Optimization</h5>
+          </div>
+          <div class="card-body">
+            <div class="row g-4">
+              <div class="col-md-6">
+                <h6 class="text-primary mb-3">Keywords to Include</h6>
+                <div class="d-flex flex-wrap gap-1 mb-3">
+                  <% industry_keywords.each do |keyword| %>
+                    <span class="badge bg-light text-dark border">
+                      <%= keyword %>
+                    </span>
+                  <% end %>
+                </div>
+                
+                <h6 class="text-primary mb-3">Profile Sections to Emphasize</h6>
+                <ul class="list-unstyled">
+                  <li class="mb-1"><i class="bi bi-check-circle text-success me-2"></i>Technical Skills</li>
+                  <li class="mb-1"><i class="bi bi-check-circle text-success me-2"></i>Project Portfolio</li>
+                  <li class="mb-1"><i class="bi bi-check-circle text-success me-2"></i>Certifications</li>
+                  <li class="mb-1"><i class="bi bi-check-circle text-success me-2"></i>Leadership Experience</li>
+                </ul>
+              </div>
+              
+              <div class="col-md-6">
+                <h6 class="text-primary mb-3">Content Strategy</h6>
+                <div class="mb-3">
+                  <div class="mb-2">
+                    <strong class="small">Share weekly:</strong>
+                    <ul class="list-unstyled small mt-1 mb-0">
+                      <li>• Industry news commentary</li>
+                      <li>• Technical insights</li>
+                      <li>• Project updates</li>
+                    </ul>
+                  </div>
+                </div>
+                
+                <h6 class="text-primary mb-3">Networking Focus</h6>
+                <div class="mb-0">
+                  <ul class="list-unstyled small">
+                    <li class="mb-1">• Connect with industry leaders</li>
+                    <li class="mb-1">• Join professional groups</li>
+                    <li class="mb-1">• Attend virtual conferences</li>
+                    <li class="mb-1">• Engage with company posts</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Success Metrics -->
+        <div class="card mb-4">
+          <div class="card-header">
+            <h5 class="mb-0">📊 Track Your Success</h5>
+          </div>
+          <div class="card-body">
+            <div class="row g-3">
+              <div class="col-md-3">
+                <div class="text-center p-3 bg-light rounded">
+                  <h4 class="text-primary mb-1">Profile Views</h4>
+                  <small class="text-muted">Target: +50% in 30 days</small>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="text-center p-3 bg-light rounded">
+                  <h4 class="text-success mb-1">Connection Requests</h4>
+                  <small class="text-muted">Target: +25% acceptance rate</small>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="text-center p-3 bg-light rounded">
+                  <h4 class="text-info mb-1">Content Engagement</h4>
+                  <small class="text-muted">Target: 5+ likes per post</small>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="text-center p-3 bg-light rounded">
+                  <h4 class="text-warning mb-1">Search Appearances</h4>
+                  <small class="text-muted">Target: +30% visibility</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="text-center">
+          <button class="btn btn-primary btn-lg me-3" onclick="window.print()">
+            <i class="bi bi-printer me-2"></i>
+            Print Report
+          </button>
+          
+          <%= link_to results_linkedin_analyses_path, 
+                      class: "btn btn-outline-secondary btn-lg me-3" do %>
+            <i class="bi bi-arrow-left me-2"></i>
+            Back to Results
+          <% end %>
+          
+          <%= link_to new_linkedin_analysis_path, 
+                      class: "btn btn-outline-primary btn-lg" do %>
+            <i class="bi bi-arrow-clockwise me-2"></i>
+            New Analysis
+          <% end %>
+        </div>
+
+      <% else %>
+        <!-- No Results State -->
+        <div class="card">
+          <div class="card-body text-center py-5">
+            <div class="mb-4">
+              <i class="bi bi-file-text fs-1 text-muted"></i>
+            </div>
+            <h4 class="text-muted mb-3">No Report Data Available</h4>
+            <p class="text-muted mb-4">
+              Complete a LinkedIn profile analysis to generate your improvement report.
+            </p>
+            
+            <%= link_to new_linkedin_analysis_path, 
+                        class: "btn btn-primary btn-lg" do %>
+              <i class="bi bi-upload me-2"></i>
+              Start Profile Analysis
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<style>
+@media print {
+  .btn, .no-print { 
+    display: none !important; 
+  }
+  
+  .card {
+    border: 1px solid #000 !important;
+    box-shadow: none !important;
+  }
+  
+  .text-primary { 
+    color: #000 !important; 
+  }
+}
+
+.border-start {
+  border-left-width: 4px !important;
+}
+</style>

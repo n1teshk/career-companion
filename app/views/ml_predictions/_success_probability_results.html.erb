@@ -1,0 +1,91 @@
+<div class="row">
+  <div class="col-md-6">
+    <!-- Success Probability Gauge -->
+    <div class="text-center mb-4">
+      <div class="position-relative d-inline-block">
+        <div class="circular-progress mb-3" 
+             data-percentage="<%= (prediction.success_probability * 100).round %>"
+             data-progress-radius="<%= ApplicationConfig.circular_progress_radius %>">
+          <svg width="120" height="120" class="circular-chart">
+            <circle cx="60" cy="60" r="<%= ApplicationConfig.circular_progress_radius %>" fill="transparent" 
+                    stroke="#e9ecef" stroke-width="8"/>
+            <circle cx="60" cy="60" r="<%= ApplicationConfig.circular_progress_radius %>" fill="transparent" 
+                    stroke="<%= success_probability_color(prediction.success_probability) %>" 
+                    stroke-width="8"
+                    stroke-dasharray="<%= (prediction.success_probability * (2 * Math::PI * ApplicationConfig.circular_progress_radius)).round(2) %>, <%= (2 * Math::PI * ApplicationConfig.circular_progress_radius).round(2) %>"
+                    stroke-linecap="round"
+                    transform="rotate(-90 60 60)"/>
+          </svg>
+          <div class="circular-progress-value">
+            <h3 class="mb-0 text-<%= success_probability_text_color(prediction.success_probability) %>">
+              <%= (prediction.success_probability * 100).round %>%
+            </h3>
+          </div>
+        </div>
+      </div>
+      <h5 class="text-<%= success_probability_text_color(prediction.success_probability) %>">
+        <%= success_probability_level(prediction.success_probability) %> Success Probability
+      </h5>
+    </div>
+  </div>
+  
+  <div class="col-md-6">
+    <!-- Success Factors -->
+    <h6 class="text-primary mb-3">🔍 Key Success Factors</h6>
+    <% formatted_results = prediction.formatted_results %>
+    <% if formatted_results[:key_factors]&.any? %>
+      <ul class="list-unstyled">
+        <% formatted_results[:key_factors].each do |factor| %>
+          <li class="d-flex align-items-center mb-2">
+            <i class="bi bi-check-circle-fill text-success me-2"></i>
+            <span><%= factor %></span>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="text-muted">Analyzing your application strengths...</p>
+    <% end %>
+    
+    <!-- Confidence Level -->
+    <div class="mt-3">
+      <small class="text-muted d-block">Prediction Confidence</small>
+      <div class="d-flex align-items-center">
+        <div class="progress me-2" style="width: 100px; height: 8px;">
+          <div class="progress-bar bg-<%= confidence_badge_color(prediction) %>" 
+               style="width: <%= (prediction.confidence_score * 100).round %>%"></div>
+        </div>
+        <small class="text-muted"><%= (prediction.confidence_score * 100).round %>%</small>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Recommendation Section -->
+<% if formatted_results[:recommendation] %>
+  <div class="mt-4">
+    <div class="alert alert-<%= success_probability_alert_type(prediction.success_probability) %> mb-0">
+      <h6 class="alert-heading mb-2">
+        <i class="bi bi-lightbulb-fill me-1"></i>
+        Recommendation
+      </h6>
+      <p class="mb-0"><%= formatted_results[:recommendation] %></p>
+    </div>
+  </div>
+<% end %>
+
+<style>
+.circular-progress {
+  position: relative;
+}
+
+.circular-progress-value {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.circular-chart {
+  transform: rotate(-90deg);
+}
+</style>

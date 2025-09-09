@@ -15,7 +15,11 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class="d-flex flex-column min-vh-100">
+  <body class="d-flex flex-column min-vh-100"
+        data-auto-refresh-interval="<%= ApplicationConfig.ui_auto_refresh_interval_ms %>"
+        data-polling-interval="<%= ApplicationConfig.ui_polling_interval_ms %>"
+        data-default-max-file-size="<%= ApplicationConfig.max_file_size.to_f %>"
+        <% if @application %>data-application-id="<%= @application.id %>"<% end %>>
     <%= render "shared/navbar" %>
     <%= render "shared/flashes" %>
 
