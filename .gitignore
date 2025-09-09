@@ -10,6 +10,16 @@
 # Ignore all environment files (except templates).
 /.env*
 !/.env*.erb
+!/.env.example
+
+# Ignore secret and credential files
+/config/master.key
+/config/credentials/*.key
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
 
 # Ignore all logfiles and tempfiles.
 /log/*
